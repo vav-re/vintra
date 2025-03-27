@@ -1,0 +1,4535 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VINTRA | Análise Dimensional Clínica</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.3/gsap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            /* Monochromatic Palette - Refined Grays */
+            --gray-50: rgba(250, 250, 252, 1);
+            --gray-100: rgba(245, 245, 250, 1);
+            --gray-200: rgba(236, 237, 242, 1);
+            --gray-300: rgba(226, 228, 236, 1);
+            --gray-400: rgba(209, 211, 222, 1);
+            --gray-500: rgba(163, 166, 183, 1);
+            --gray-600: rgba(119, 123, 146, 1);
+            --gray-700: rgba(85, 88, 105, 1);
+            --gray-800: rgba(52, 54, 65, 1);
+            --gray-900: rgba(34, 35, 42, 1);
+            --gray-950: rgba(24, 25, 30, 1);
+            
+            /* Functional Colors */
+            --accent-subtle: rgba(58, 130, 246, 0.08);
+            --accent-light: rgba(58, 130, 246, 0.2);
+            --accent: rgba(58, 130, 246, 0.8);
+            --accent-vivid: rgba(58, 130, 246, 1);
+            
+            --success-subtle: rgba(16, 185, 129, 0.08);
+            --success-light: rgba(16, 185, 129, 0.2);
+            --success: rgba(16, 185, 129, 0.8);
+            
+            --error-subtle: rgba(239, 68, 68, 0.08);
+            --error-light: rgba(239, 68, 68, 0.2);
+            --error: rgba(239, 68, 68, 0.8);
+            
+            --warning-subtle: rgba(245, 158, 11, 0.08);
+            --warning-light: rgba(245, 158, 11, 0.2);
+            --warning: rgba(245, 158, 11, 0.8);
+            
+            /* Surface Colors */
+            --surface-white: rgba(255, 255, 255, 1);
+            --surface-hover: rgba(245, 245, 250, 0.7);
+            --surface-background: rgba(250, 250, 252, 1);
+            --surface-raised: rgba(255, 255, 255, 0.6);
+            --surface-overlay: rgba(255, 255, 255, 0.85);
+            
+            /* Text Colors */
+            --text-primary: rgba(34, 35, 42, 0.95);
+            --text-secondary: rgba(85, 88, 105, 0.9);
+            --text-tertiary: rgba(119, 123, 146, 0.8);
+            --text-disabled: rgba(119, 123, 146, 0.5);
+            --text-on-accent: rgba(255, 255, 255, 0.95);
+            
+            /* Visual Effects */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.03);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.04);
+            --shadow-xl: 0 16px 42px rgba(0, 0, 0, 0.08), 0 6px 16px rgba(0, 0, 0, 0.05);
+            
+            --blur-sm: 6px;
+            --blur-md: 12px;
+            --blur-lg: 24px;
+            
+            /* Radii */
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-2xl: 24px;
+            --radius-full: 9999px;
+            
+            /* Subtle OceanThetics Gradients */
+            --gradient-subtle-gray: linear-gradient(120deg, var(--gray-50), var(--gray-100));
+            --gradient-glass: linear-gradient(120deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.3));
+            --gradient-light-accent: linear-gradient(120deg, rgba(58, 130, 246, 0.04), rgba(58, 130, 246, 0.01));
+            
+            /* Animation Curves */
+            --ease-in-out: cubic-bezier(0.45, 0, 0.15, 1);
+            --ease-out: cubic-bezier(0.17, 0.67, 0.35, 0.99);
+            --ease-elastic: cubic-bezier(0.32, 1.75, 0.65, 0.88);
+            --ease-bounce: cubic-bezier(0.22, 1.35, 0.32, 1);
+            --ease-gentle: cubic-bezier(0.45, 0.05, 0.35, 1);
+            
+            /* Animation Durations */
+            --duration-xs: 100ms;
+            --duration-sm: 200ms;
+            --duration-md: 300ms;
+            --duration-lg: 500ms;
+            --duration-xl: 800ms;
+            
+            /* Component Sizes */
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-5: 20px;
+            --space-6: 24px;
+            --space-8: 32px;
+            --space-10: 40px;
+            --space-12: 48px;
+            --space-16: 64px;
+            --space-20: 80px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        ::selection {
+            background: var(--accent-light);
+            color: var(--text-primary);
+        }
+
+        body {
+            background: var(--gradient-subtle-gray);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+            letter-spacing: -0.01em;
+        }
+        
+        /* Subtle Background Animation */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(120deg, 
+                rgba(255, 255, 255, 0) 20%, 
+                rgba(136, 165, 255, 0.03) 50%, 
+                rgba(255, 255, 255, 0) 80%);
+            opacity: 0.4;
+            z-index: -1;
+            animation: subtleGlow 25s infinite alternate ease-in-out;
+        }
+        
+        @keyframes subtleGlow {
+            0% { transform: scale(1) translateX(-10%) translateY(-5%); }
+            100% { transform: scale(1.1) translateX(10%) translateY(5%); }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gray-400);
+            border-radius: var(--radius-full);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-500);
+        }
+
+        /* Login Screen Styles */
+        #loginScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--surface-white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 1s var(--ease-in-out), visibility 1s var(--ease-in-out);
+        }
+
+        #loginScreen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 380px;
+            padding: var(--space-8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--surface-white);
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(0);
+            transition: transform var(--duration-lg) var(--ease-out);
+        }
+
+        #loginScreen.hidden .login-container {
+            transform: translateY(40px);
+        }
+
+        .logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: var(--space-8);
+            transition: all var(--duration-lg) var(--ease-gentle);
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.06));
+        }
+
+        .login-heading {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+            text-align: center;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .login-subheading {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-8);
+            text-align: center;
+        }
+
+        .login-form {
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: var(--space-5);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: var(--space-2);
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: var(--space-3) var(--space-4);
+            background-color: var(--gray-100);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 0.9375rem;
+            color: var(--text-primary);
+            transition: all var(--duration-md) var(--ease-gentle);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+        }
+
+        .form-input:focus {
+            outline: none;
+            background-color: var(--gray-50);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02), 
+                        0 0 0 2px var(--accent-light);
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.75rem;
+            margin-top: var(--space-2);
+            display: none;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-3) var(--space-6);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--duration-md) var(--ease-out);
+            border: none;
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .btn-primary {
+            background-color: var(--gray-900);
+            color: var(--gray-50);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--gray-800);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0px);
+        }
+
+        .btn-secondary {
+            background-color: var(--gray-100);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--gray-200);
+            transform: translateY(-1px);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .btn-icon {
+            margin-right: var(--space-2);
+            font-size: 0.875em;
+        }
+
+        /* Main App Container */
+        #appContainer {
+            display: none;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* App Header */
+        .app-header {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(var(--blur-md));
+            -webkit-backdrop-filter: blur(var(--blur-md));
+            position: relative;
+            z-index: 10;
+            padding: var(--space-4) var(--space-6);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background var(--duration-lg) var(--ease-gentle);
+        }
+        
+        .app-header::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(209, 211, 222, 0.5), 
+                transparent);
+            opacity: 0.6;
+        }
+
+        .app-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .app-logo img {
+            height: 28px;
+            width: auto;
+            transition: transform var(--duration-md) var(--ease-out);
+        }
+        
+        .app-logo:hover img {
+            transform: scale(1.05);
+        }
+
+        .app-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.03em;
+        }
+
+        .app-nav {
+            display: flex;
+            align-items: center;
+            gap: var(--space-5);
+        }
+
+        .nav-item {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9375rem;
+            font-weight: 450;
+            transition: all var(--duration-md) var(--ease-gentle);
+            position: relative;
+            padding: var(--space-1) var(--space-1);
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transform: translateX(-50%);
+            transition: width var(--duration-md) var(--ease-gentle);
+            border-radius: var(--radius-full);
+            opacity: 0;
+        }
+
+        .nav-item:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-item:hover::after {
+            width: 20px;
+            opacity: 0.5;
+        }
+
+        .nav-item.active {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .nav-item.active::after {
+            width: 24px;
+            opacity: 1;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            cursor: pointer;
+            position: relative;
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-lg);
+            transition: all var(--duration-md) var(--ease-gentle);
+        }
+        
+        .user-menu:hover {
+            background: var(--gray-100);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-full);
+            background-color: var(--gray-900);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            font-size: 14px;
+            transition: transform var(--duration-md) var(--ease-out);
+        }
+        
+        .user-menu:hover .user-avatar {
+            transform: scale(1.05);
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: calc(100% + var(--space-3));
+            right: 0;
+            background-color: var(--surface-overlay);
+            backdrop-filter: blur(var(--blur-md));
+            -webkit-backdrop-filter: blur(var(--blur-md));
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            min-width: 200px;
+            z-index: 100;
+            display: none;
+            overflow: hidden;
+            transform-origin: top right;
+            animation: dropdownAppear var(--duration-md) var(--ease-out) forwards;
+        }
+        
+        @keyframes dropdownAppear {
+            from { 
+                opacity: 0; 
+                transform: scale(0.95) translateY(-10px);
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .user-menu:hover .user-dropdown {
+            display: block;
+        }
+
+        .user-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-4);
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all var(--duration-md) var(--ease-gentle);
+        }
+
+        .user-dropdown-item:hover {
+            background-color: var(--gray-100);
+        }
+
+        .user-dropdown-divider {
+            height: 1px;
+            background: linear-gradient(
+                to right,
+                transparent,
+                var(--gray-300),
+                transparent
+            );
+            margin: var(--space-1) 0;
+            opacity: 0.6;
+        }
+
+        /* Main Layout */
+        .app-main {
+            flex: 1;
+            display: flex;
+            height: calc(100vh - 65px);
+        }
+
+        /* Sidebar */
+        .app-sidebar {
+            width: 60px;
+            background-color: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(var(--blur-sm));
+            -webkit-backdrop-filter: blur(var(--blur-sm));
+            display: flex;
+            flex-direction: column;
+            transition: all var(--duration-lg) var(--ease-in-out);
+            overflow: hidden;
+            z-index: 5;
+            position: relative;
+        }
+        
+        .app-sidebar::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, 
+                transparent, 
+                rgba(209, 211, 222, 0.5), 
+                transparent);
+            opacity: 0.6;
+        }
+
+        .app-sidebar.expanded {
+            width: 220px;
+        }
+
+        .sidebar-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 48px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all var(--duration-md) var(--ease-gentle);
+        }
+        
+        .sidebar-toggle:hover {
+            color: var(--text-primary);
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            padding: var(--space-3) var(--space-2);
+            flex: 1;
+            gap: var(--space-3);
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            padding: var(--space-3) var(--space-3);
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all var(--duration-md) var(--ease-gentle);
+            white-space: nowrap;
+            border-radius: var(--radius-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--accent);
+            transform: scaleY(0);
+            transition: transform var(--duration-md) var(--ease-gentle);
+            opacity: 0;
+        }
+
+        .sidebar-link:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+            color: var(--text-primary);
+        }
+
+        .sidebar-link.active {
+            background-color: var(--accent-subtle);
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        
+        .sidebar-link.active::before {
+            transform: scaleY(0.6);
+            opacity: 1;
+        }
+
+        .sidebar-link i {
+            width: 20px;
+            font-size: 1.125rem;
+            text-align: center;
+            transition: transform var(--duration-md) var(--ease-out);
+        }
+        
+        .sidebar-link:hover i {
+            transform: translateY(-1px);
+        }
+
+        .sidebar-link span {
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all var(--duration-lg) var(--ease-in-out);
+        }
+
+        .app-sidebar.expanded .sidebar-link span {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Dashboard */
+        .dashboard {
+            padding: var(--space-6);
+            flex: 1;
+            overflow-y: auto;
+            background: var(--surface-background);
+        }
+
+        .dashboard-header {
+            margin-bottom: var(--space-8);
+        }
+
+        .dashboard-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+        }
+
+        .dashboard-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+        }
+
+        .welcome-message {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.3));
+            backdrop-filter: blur(var(--blur-sm));
+            -webkit-backdrop-filter: blur(var(--blur-sm));
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            margin-bottom: var(--space-8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--duration-lg) var(--ease-gentle);
+        }
+        
+        .welcome-message:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .welcome-message::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.8s var(--ease-gentle);
+        }
+        
+        .welcome-message:hover::before {
+            transform: translateX(100%);
+        }
+
+        .welcome-text h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+        }
+
+        .welcome-text p {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            margin-bottom: var(--space-4);
+        }
+
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: var(--space-5);
+            margin-bottom: var(--space-8);
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6));
+            backdrop-filter: blur(var(--blur-sm));
+            -webkit-backdrop-filter: blur(var(--blur-sm));
+            border-radius: var(--radius-xl);
+            padding: var(--space-5);
+            transition: all var(--duration-lg) var(--ease-out);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s var(--ease-gentle);
+        }
+        
+        .stat-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-card-title {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-3);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .stat-card-value {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-4);
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .recent-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--space-4);
+        }
+
+        .recent-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            padding: var(--space-4);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.4));
+            backdrop-filter: blur(var(--blur-sm));
+            -webkit-backdrop-filter: blur(var(--blur-sm));
+            border-radius: var(--radius-lg);
+            transition: all var(--duration-md) var(--ease-out);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .recent-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s var(--ease-gentle);
+        }
+        
+        .recent-item:hover::before {
+            transform: translateX(100%);
+        }
+
+        .recent-item:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: var(--shadow-md);
+        }
+
+        .recent-item-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            background-color: var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            transition: all var(--duration-md) var(--ease-elastic);
+        }
+        
+        .recent-item:hover .recent-item-icon {
+            transform: scale(1.1);
+        }
+
+        .recent-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .recent-item-title {
+            font-weight: 500;
+            margin-bottom: var(--space-1);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .recent-item-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .recent-item-meta-divider {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background-color: var(--gray-400);
+        }
+
+        /* Document Library / Workspace Layout */
+        .workspace {
+            display: flex;
+            height: 100%;
+            flex: 1;
+        }
+
+        .document-library {
+            width: 280px;
+            background: rgba(250, 250, 252, 0.4);
+            backdrop-filter: blur(var(--blur-sm));
+            -webkit-backdrop-filter: blur(var(--blur-sm));
+            display: flex;
+            flex-direction: column;
+            transition: all var(--duration-lg) var(--ease-in-out);
+            z-index: 3;
+            position: relative;
+        }
+        
+        .document-library::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, var(--gray-300), transparent);
+            opacity: 0.4;
+        }
+
+        .library-header {
+            padding: var(--space-4);
+        }
+
+        .library-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-3);
+        }
+
+        .library-actions {
+            display: flex;
+            gap: var(--space-2);
+        }
+
+        .library-btn {
+            padding: var(--space-2);
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: var(--radius-lg);
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            cursor: pointer;
+            flex: 1;
+            justify-content: center;
+            transition: all var(--duration-md) var(--ease-out);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .library-btn:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .library-btn i {
+            font-size: 0.875rem;
+        }
+
+        .library-search {
+            position: relative;
+            margin-top: var(--space-3);
+        }
+
+        .library-search-input {
+            width: 100%;
+            padding: var(--space-2) var(--space-4) var(--space-2) var(--space-8);
+            background-color: rgba(255, 255, 255, 0.6);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 0.8125rem;
+            color: var(--text-primary);
+            transition: all var(--duration-md) var(--ease-gentle);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .library-search-input:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: var(--shadow-md);
+        }
+
+        .library-search-icon {
+            position: absolute;
+            left: var(--space-3);
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+            font-size: 0.75rem;
+            pointer-events: none;
+        }
+
+        .library-filters {
+            display: flex;
+            gap: var(--space-1);
+            margin-top: var(--space-3);
+            overflow-x: auto;
+            padding-bottom: var(--space-1);
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .library-filters::-webkit-scrollbar {
+            display: none;
+        }
+
+        .library-filter {
+            padding: var(--space-1) var(--space-2);
+            background: none;
+            border: none;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all var(--duration-md) var(--ease-gentle);
+        }
+
+        .library-filter.active {
+            background-color: var(--gray-900);
+            color: white;
+        }
+
+        .library-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 var(--space-2);
+        }
+
+        .library-section {
+            margin-bottom: var(--space-4);
+        }
+
+        .library-section-header {
+            padding: 0 var(--space-2);
+            margin-bottom: var(--space-2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .library-section-title {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .library-section-action {
+            font-size: 0.75rem;
+            color: var(--accent);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color var(--duration-md) var(--ease-gentle);
+        }
+        
+        .library-section-action:hover {
+            color: var(--accent-vivid);
+        }
+
+        .document-item {
+            display: flex;
+            align-items: center;
+            padding: var(--space-3) var(--space-2);
+            cursor: pointer;
+            transition: all var(--duration-md) var(--ease-out);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .document-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 0;
+            background: var(--accent);
+            border-radius: 0 var(--radius-full) var(--radius-full) 0;
+            transition: height var(--duration-md) var(--ease-out);
+            opacity: 0;
+        }
+
+        .document-item:hover {
+            background-color: rgba(255, 255, 255, 0.6);
+            transform: translateX(2px);
+        }
+        
+        .document-item:hover::before {
+            height: 50%;
+            opacity: 0.6;
+        }
+
+        .document-item.active {
+            background-color: rgba(58, 130, 246, 0.08);
+        }
+        
+        .document-item.active::before {
+            height: 70%;
+            opacity: 1;
+        }
+
+        .document-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: var(--space-3);
+            font-size: 1rem;
+            color: var(--text-secondary);
+            transition: transform var(--duration-md) var(--ease-out);
+        }
+        
+        .document-item:hover .document-icon {
+            transform: scale(1.1);
+        }
+
+        .document-item.audio .document-icon {
+            color: #8B5CF6;
+        }
+
+        .document-item.transcription .document-icon {
+            color: #6366F1;
+        }
+
+        .document-item.vintra .document-icon {
+            color: #0EA5E9;
+        }
+
+        .document-item.soap .document-icon {
+            color: #10B981;
+        }
+
+        .document-item.narrative .document-icon {
+            color: #F59E0B;
+        }
+
+        .document-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .document-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: var(--space-1);
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .document-meta {
+            font-size: 0.6875rem;
+            color: var(--text-tertiary);
+        }
+
+        .document-actions {
+            opacity: 0;
+            transition: opacity var(--duration-md) var(--ease-gentle);
+        }
+
+        .document-item:hover .document-actions {
+            opacity: 1;
+        }
+
+        .document-action-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.875rem;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-sm);
+            transition: all var(--duration-md) var(--ease-gentle);
+        }
+
+        .document-action-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--text-primary);
+        }
+
+        /* Document Workspace */
+        .document-workspace {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--surface-background);
+            transition: all var(--duration-lg) var(--ease-in-out);
+        }
+
+        /* Focus Mode Styles */
+        .focus-mode-btn {
+            position: absolute;
+            top: var(--space-4);
+            right: var(--space-4);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 50;
+            transition: all var(--duration-md) var(--ease-out);
+            color: var(--text-secondary);
+            backdrop-filter: blur(var(--blur-sm));
+            -webkit-backdrop-filter: blur(var(--blur-sm));
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .focus-mode-btn:hover {
+            background-color: rgba(255, 255, 255, 0.95);
+            transform: scale(1.1);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .focus-mode .app-sidebar,
+        .focus-mode .document-library,
+        .focus-mode .app-header {
+            opacity: 0;
+            transform: translateX(-20px);
+            pointer-events: none;
+            transition: all var(--duration-lg) var(--ease-in-out);
+        }
+        
+        .focus-mode .document-workspace {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 40;
+            background-color: var(--surface-background);
+            transition: all var(--duration-lg) var(--ease-in-out);
+        }
+        
+        .focus-mode .document-toolbar {
+            opacity: 0.1;
+            transition: opacity var(--duration-md) var(--ease-gentle);
+        }
+        
+        .focus-mode .document-toolbar:hover {
+            opacity: 1;
+        }
+        
+        .focus-mode .document-content {
+            padding: var(--space-8);
+        }
+        
+        .focus-mode .document-container {
+            max-width: 900px;
+            margin: 0 auto;
+            box-shadow: var(--shadow-md);
+            transition: all var(--duration-lg) var(--ease-gentle);
+        }
+
+        .document-empty {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-8);
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .document-empty-icon {
+            font-size: 4rem;
+            margin-bottom: var(--space-6);
+            opacity: 0.2;
+            color: var(--text-tertiary);
+        }
+
+        .document-empty-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .document-empty-text {
+            font-size: 0.9375rem;
+            max-width: 400px;
+            margin-bottom: var(--space-5);
+            color: var(--text-secondary);
+        }
+
+        .document-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-3) var(--space-5);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(var(--blur-sm));
+            -webkit-backdrop-filter: blur(var(--blur-sm));
+            transition: all var(--duration-md) var(--ease-gentle);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .document-toolbar::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: var(--space-5);
+            right: var(--space-5);
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gray-300), transparent);
+            opacity: 0.4;
+        }
+
+        .document-info-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .document-info-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            transition: transform var(--duration-md) var(--ease-out);
+        }
+        
+        .document-toolbar:hover .document-info-icon {
+            transform: scale(1.1);
+        }
+
+        .document-audio .document-info-icon {
+            color: #8B5CF6;
+        }
+
+        .document-transcription .document-info-icon {
+            color: #6366F1;
+        }
+
+        .document-vintra .document-info-icon {
+            color: #0EA5E9;
+        }
+
+        .document-soap .document-info-icon {
+            color: #10B981;
+        }
+
+        .document-narrative .document-info-icon {
+            color: #F59E0B;
+        }
+
+        .document-info-details h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: var(--space-1);
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .document-info-meta {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .document-info-meta-divider {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background-color: var(--gray-400);
+        }
+
+        .document-toolbar-actions {
+            display: flex;
+            gap: var(--space-2);
+        }
+
+        .toolbar-btn {
+            padding: var(--space-2) var(--space-3);
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: var(--radius-lg);
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            cursor: pointer;
+            transition: all var(--duration-md) var(--ease-out);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .toolbar-btn:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .toolbar-btn.primary {
+            background-color: var(--gray-900);
+            color: white;
+        }
+
+        .toolbar-btn.primary:hover {
+            background-color: var(--gray-800);
+        }
+
+        .document-content {
+            flex: 1;
+            overflow: auto;
+            background-color: var(--surface-background);
+            padding: var(--space-5);
+            transition: all var(--duration-md) var(--ease-gentle);
+        }
+
+        .document-container {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+            backdrop-filter: blur(var(--blur-sm));
+            -webkit-backdrop-filter: blur(var(--blur-sm));
+            border-radius: var(--radius-xl);
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: var(--shadow-sm);
+            min-height: 100%;
+            transition: all var(--duration-lg) var(--ease-gentle);
+            overflow: hidden;
+        }
+        
+        .document-container:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .document-view {
+            padding: var(--space-8);
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 0.9375rem;
+            color: var(--text-primary);
+        }
+
+        .document-edit {
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+            padding: var(--space-8);
+            border: none;
+            resize: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9375rem;
+            line-height: 1.6;
+            background: transparent;
+            color: var(--text-primary);
+        }
+
+        .document-edit:focus {
+            outline: none;
+        }
+
+        .document-footer {
+            padding: var(--space-4) var(--space-5);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(var(--blur-sm));
+            -webkit-backdrop-filter: blur(var(--blur-sm));
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .document-footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: var(--space-5);
+            right: var(--space-5);
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gray-300), transparent);
+            opacity: 0.4;
+        }
+
+        .document-status {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+        }
+
+        .document-status.saving {
+            color: var(--warning);
+        }
+
+        .document-status.saved {
+            color: var(--success);
+        }
+
+        .document-footer-actions {
+            display: flex;
+            gap: var(--space-3);
+            align-items: center;
+        }
+
+        .processing-options {
+            display: flex;
+            gap: var(--space-3);
+            font-size: 0.75rem;
+        }
+
+        .processing-options .option {
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+        }
+
+        /* Recording Module */
+        .recording-module {
+            padding: var(--space-8);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+            backdrop-filter: blur(var(--blur-sm));
+            -webkit-backdrop-filter: blur(var(--blur-sm));
+            border-radius: var(--radius-xl);
+            transition: all var(--duration-lg) var(--ease-gentle);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .recording-module:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .recording-header {
+            text-align: center;
+            margin-bottom: var(--space-8);
+        }
+
+        .recording-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .recording-subtitle {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+        }
+
+        .recording-controls {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-6);
+            margin-bottom: var(--space-6);
+        }
+
+        .recording-btn {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--duration-md) var(--ease-out);
+            border: none;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .recording-btn:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .recording-btn-start {
+            background-color: var(--error);
+            color: white;
+        }
+
+        .recording-btn-stop {
+            background-color: var(--gray-900);
+            color: white;
+        }
+
+        .recording-btn-pause {
+            background-color: var(--warning);
+            color: white;
+        }
+
+        .recording-timer {
+            text-align: center;
+            margin-bottom: var(--space-6);
+        }
+
+        .recording-time {
+            font-size: 2.5rem;
+            font-weight: 500;
+            font-family: monospace;
+            margin-bottom: var(--space-2);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .recording-status {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+        }
+
+        .recording-visualizer {
+            height: 100px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.2));
+            backdrop-filter: blur(var(--blur-sm));
+            -webkit-backdrop-filter: blur(var(--blur-sm));
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-6);
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .visualizer-bars {
+            display: flex;
+            align-items: flex-end;
+            height: 100%;
+            gap: 2px;
+            padding: 0 var(--space-4);
+        }
+
+        .visualizer-bar {
+            width: 4px;
+            background: linear-gradient(to top, var(--accent), rgba(58, 130, 246, 0.3));
+            border-radius: var(--radius-full);
+            transition: height 0.1s var(--ease-out);
+        }
+
+        /* Progress and Loading */
+        .progress-container {
+            margin-bottom: var(--space-6);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--space-2);
+        }
+
+        .progress-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .progress-percentage {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background-color: var(--gray-200);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            margin-bottom: var(--space-2);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-light), var(--accent));
+            width: 0%;
+            transition: width 0.6s var(--ease-out);
+            border-radius: var(--radius-full);
+        }
+
+        .progress-status {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+
+        /* Upload Module */
+        .upload-module {
+            padding: var(--space-8);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+            backdrop-filter: blur(var(--blur-sm));
+            -webkit-backdrop-filter: blur(var(--blur-sm));
+            border-radius: var(--radius-xl);
+            transition: all var(--duration-lg) var(--ease-gentle);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .upload-module:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .upload-header {
+            text-align: center;
+            margin-bottom: var(--space-6);
+        }
+
+        .upload-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .upload-subtitle {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--gray-300);
+            border-radius: var(--radius-xl);
+            padding: var(--space-12) var(--space-8);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--duration-md) var(--ease-out);
+            margin-bottom: var(--space-6);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.2));
+        }
+
+        .upload-area:hover, .upload-area.dragover {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, rgba(58, 130, 246, 0.05), rgba(58, 130, 246, 0.02));
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: var(--space-4);
+            transition: transform var(--duration-md) var(--ease-elastic);
+        }
+        
+        .upload-area:hover .upload-icon {
+            transform: translateY(-5px);
+        }
+
+        .upload-message {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: var(--space-2);
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .upload-hint {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-4);
+        }
+
+        .upload-input {
+            display: none;
+        }
+
+        .upload-preview {
+            padding: var(--space-4);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.5));
+            backdrop-filter: blur(var(--blur-sm));
+            -webkit-backdrop-filter: blur(var(--blur-sm));
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--space-6);
+            display: none;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .upload-preview.visible {
+            display: flex;
+        }
+
+        .upload-preview-icon {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-right: var(--space-4);
+        }
+
+        .upload-preview-info {
+            flex: 1;
+        }
+
+        .upload-preview-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: var(--space-1);
+            color: var(--text-primary);
+        }
+
+        .upload-preview-meta {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+
+        .upload-preview-remove {
+            background: none;
+            border: none;
+            color: var(--error);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: transform var(--duration-md) var(--ease-out);
+        }
+        
+        .upload-preview-remove:hover {
+            transform: scale(1.1);
+        }
+
+        /* Diarization Checkbox */
+        .diarization-option {
+            margin-top: var(--space-4);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .diarization-checkbox {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent);
+        }
+
+        .diarization-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* Additional formatting options for document processing */
+        .processing-container {
+            margin-bottom: var(--space-6);
+        }
+
+        .document-format-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+            margin-bottom: var(--space-4);
+        }
+
+        .document-format-option {
+            padding: var(--space-2) var(--space-3);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.5));
+            backdrop-filter: blur(var(--blur-sm));
+            -webkit-backdrop-filter: blur(var(--blur-sm));
+            border-radius: var(--radius-lg);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all var(--duration-md) var(--ease-out);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .document-format-option:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .document-format-option.active {
+            background-color: var(--gray-900);
+            color: white;
+        }
+
+        /* Toast Notifications with Flow Effects */
+        .toast-container {
+            position: fixed;
+            bottom: var(--space-6);
+            right: var(--space-6);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+            max-width: 100%;
+            pointer-events: none;
+        }
+
+        .toast {
+            padding: var(--space-4);
+            border-radius: var(--radius-lg);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(var(--blur-md));
+            -webkit-backdrop-filter: blur(var(--blur-md));
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            min-width: 300px;
+            max-width: 100%;
+            transform-origin: right bottom;
+            pointer-events: auto;
+            animation: toast-enter var(--duration-md) var(--ease-bounce) forwards;
+        }
+
+        @keyframes toast-enter {
+            0% { 
+                transform: translateY(20px) scale(0.8); 
+                opacity: 0; 
+            }
+            100% { 
+                transform: translateY(0) scale(1); 
+                opacity: 1; 
+            }
+        }
+
+        .toast.exit {
+            animation: toast-exit var(--duration-md) var(--ease-out) forwards;
+        }
+
+        @keyframes toast-exit {
+            0% { 
+                transform: translateY(0) scale(1); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: translateY(20px) scale(0.8); 
+                opacity: 0; 
+            }
+        }
+
+        .toast-icon {
+            margin-right: var(--space-3);
+            font-size: 1.25rem;
+        }
+
+        .toast-icon.success { color: var(--success); }
+        .toast-icon.error { color: var(--error); }
+        .toast-icon.warning { color: var(--warning); }
+        .toast-icon.info { color: var(--accent); }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: var(--space-1);
+            color: var(--text-primary);
+        }
+
+        .toast-message {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: var(--space-1);
+            margin-left: var(--space-2);
+            border-radius: var(--radius-sm);
+            transition: all var(--duration-md) var(--ease-gentle);
+        }
+        
+        .toast-close:hover {
+            color: var(--text-primary);
+            background-color: var(--gray-100);
+        }
+
+        /* Modal Styles with Flow Effects */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(34, 35, 42, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--duration-lg) var(--ease-gentle), 
+                        visibility var(--duration-lg) var(--ease-gentle);
+            backdrop-filter: blur(var(--blur-sm));
+            -webkit-backdrop-filter: blur(var(--blur-sm));
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(var(--blur-md));
+            -webkit-backdrop-filter: blur(var(--blur-md));
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-xl);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(40px);
+            transition: transform var(--duration-lg) var(--ease-elastic);
+            overflow: hidden;
+        }
+
+        .modal-overlay.show .modal-container {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: var(--space-5) var(--space-6);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        
+        .modal-header::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: var(--space-6);
+            right: var(--space-6);
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gray-300), transparent);
+            opacity: 0.4;
+        }
+
+        .modal-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.125rem;
+            color: var(--text-tertiary);
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-full);
+            transition: all var(--duration-md) var(--ease-gentle);
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+            background-color: var(--gray-100);
+        }
+
+        .modal-body {
+            padding: var(--space-6);
+            overflow-y: auto;
+            flex: 1;
+            color: var(--text-primary);
+        }
+
+        .modal-form-group {
+            margin-bottom: var(--space-5);
+        }
+
+        .modal-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: var(--space-2);
+            color: var(--text-secondary);
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: var(--space-3) var(--space-4);
+            background-color: var(--gray-100);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 0.9375rem;
+            color: var(--text-primary);
+            transition: all var(--duration-md) var(--ease-gentle);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+        }
+
+        .modal-input:focus {
+            outline: none;
+            background-color: var(--gray-50);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02), 
+                        0 0 0 2px var(--accent-light);
+        }
+
+        .modal-footer {
+            padding: var(--space-5) var(--space-6);
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--space-4);
+            position: relative;
+        }
+        
+        .modal-footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: var(--space-6);
+            right: var(--space-6);
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gray-300), transparent);
+            opacity: 0.4;
+        }
+
+        /* Fluid Animations - Additional Hover Effects */
+        .floating-effect {
+            transition: transform var(--duration-md) var(--ease-out);
+        }
+        
+        .floating-effect:hover {
+            transform: translateY(-3px);
+        }
+        
+        /* Water-like ripple effect for buttons */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0);
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .ripple-animation {
+            animation: ripple-effect 0.8s var(--ease-out);
+        }
+        
+        @keyframes ripple-effect {
+            0% { transform: scale(0); opacity: 0.4; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+        
+        /* Float animations for cards */
+        @keyframes float-subtle {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+            100% { transform: translateY(0); }
+        }
+        
+        /* Soft glow effect */
+        .glow-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glow-effect::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                circle at center,
+                rgba(255, 255, 255, 0.3) 0%,
+                transparent 70%
+            );
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity var(--duration-lg) var(--ease-gentle),
+                        transform var(--duration-lg) var(--ease-gentle);
+            pointer-events: none;
+            z-index: 2;
+        }
+        
+        .glow-effect:hover::after {
+            opacity: 0.6;
+            transform: scale(1);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1024px) {
+            .workspace {
+                flex-direction: column;
+            }
+
+            .document-library {
+                width: 100%;
+                height: 300px;
+                min-height: 300px;
+            }
+
+            .app-sidebar {
+                width: 100%;
+                height: auto;
+            }
+
+            .sidebar-menu {
+                flex-direction: row;
+                overflow-x: auto;
+                padding: var(--space-2) var(--space-4);
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            
+            .sidebar-menu::-webkit-scrollbar {
+                display: none;
+            }
+
+            .sidebar-link {
+                border-radius: var(--radius-lg);
+                flex-shrink: 0;
+            }
+
+            .sidebar-link::before {
+                width: 100%;
+                height: 3px;
+                top: auto;
+                bottom: 0;
+                transform: scaleX(0);
+            }
+            
+            .sidebar-link.active::before {
+                transform: scaleX(0.6);
+            }
+
+            .app-sidebar.expanded {
+                width: 100%;
+            }
+
+            .sidebar-link span {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stat-cards, .recent-items {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-message {
+                flex-direction: column;
+                text-align: center;
+                gap: var(--space-4);
+                align-items: center;
+            }
+
+            .audio-controls {
+                flex-direction: column;
+                gap: var(--space-4);
+            }
+
+            .audio-volume {
+                width: 100%;
+            }
+
+            .audio-volume-slider {
+                width: 100%;
+            }
+
+            .document-toolbar {
+                flex-direction: column;
+                gap: var(--space-3);
+                align-items: flex-start;
+            }
+
+            .document-toolbar-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .document-footer {
+                flex-direction: column;
+                gap: var(--space-4);
+            }
+
+            .document-footer-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .app-header {
+                padding: var(--space-3) var(--space-4);
+            }
+            
+            .app-nav {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                width: 90%;
+                padding: var(--space-5);
+            }
+            
+            .dashboard {
+                padding: var(--space-4);
+            }
+
+            .document-content {
+                padding: var(--space-3);
+            }
+
+            .document-view, .document-edit {
+                padding: var(--space-4);
+                font-size: 0.875rem;
+            }
+
+            .modal-container {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body class="">
+    <!-- Login Screen -->
+    <div id="loginScreen">
+        <div class="login-container">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAwIDEwMDAiPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZDEiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwQTBGMTYiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwQTBGMTYiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cG9seWdvbiBwb2ludHM9IjUwMCwxMDAgMTAwLDgwMCA5MDAsODAwIiBmaWxsPSIjMEEwRjE2Ii8+PHBhdGggZD0iTTE1MCw1MDAgTDMwMCw4MDAiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik0zNTAsMzAwIEw1MDAsODAwIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjI1IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNNTUwLDMwMCBMNzAwLDgwMCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+" alt="VINTRA Logo" class="logo">
+            <h1 class="login-heading">VINTRA</h1>
+            <p class="login-subheading">Análise Dimensional Clínica</p>
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="password" class="form-label">Senha de Acesso</label>
+                    <input type="password" id="password" class="form-input" placeholder="Digite sua senha de acesso">
+                    <div class="error-message" id="passwordError">Senha incorreta. Por favor, tente novamente.</div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="appContainer">
+        <!-- App Header -->
+        <header class="app-header">
+            <div class="app-logo">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAwIDEwMDAiPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZDEiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwQTBGMTYiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwQTBGMTYiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cG9seWdvbiBwb2ludHM9IjUwMCwxMDAgMTAwLDgwMCA5MDAsODAwIiBmaWxsPSIjMEEwRjE2Ii8+PHBhdGggZD0iTTE1MCw1MDAgTDMwMCw4MDAiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik0zNTAsMzAwIEw1MDAsODAwIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjI1IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNNTUwLDMwMCBMNzAwLDgwMCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+" alt="VINTRA Logo">
+                <h1 class="app-title">VINTRA</h1>
+            </div>
+            <nav class="app-nav">
+                <a href="#dashboard" class="nav-item active" data-target="dashboard">Dashboard</a>
+                <a href="#biblioteca" class="nav-item" data-target="library">Biblioteca</a>
+                <a href="#pacientes" class="nav-item" data-target="patients">Pacientes</a>
+                <a href="#relatorios" class="nav-item" data-target="reports">Relatórios</a>
+            </nav>
+            <div class="user-menu">
+                <div class="user-avatar">D</div>
+                <div class="user-dropdown">
+                    <a href="#perfil" class="user-dropdown-item">
+                        <i class="fas fa-user"></i>
+                        Meu Perfil
+                    </a>
+                    <a href="#preferencias" class="user-dropdown-item">
+                        <i class="fas fa-cog"></i>
+                        Preferências
+                    </a>
+                    <div class="user-dropdown-divider"></div>
+                    <a href="#sair" class="user-dropdown-item" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Sair
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- App Main -->
+        <main class="app-main">
+            <!-- Sidebar -->
+            <div class="app-sidebar">
+                <div class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="sidebar-menu">
+                    <a href="#dashboard" class="sidebar-link active" data-target="dashboard">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#novo" class="sidebar-link" data-target="new">
+                        <i class="fas fa-plus"></i>
+                        <span>Novo</span>
+                    </a>
+                    <a href="#biblioteca" class="sidebar-link" data-target="library">
+                        <i class="fas fa-folder"></i>
+                        <span>Biblioteca</span>
+                    </a>
+                    <a href="#pacientes" class="sidebar-link" data-target="patients">
+                        <i class="fas fa-user-friends"></i>
+                        <span>Pacientes</span>
+                    </a>
+                    <a href="#relatorios" class="sidebar-link" data-target="reports">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Relatórios</span>
+                    </a>
+                    <a href="#configuracoes" class="sidebar-link" data-target="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Configurações</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Dashboard -->
+            <div class="dashboard" id="dashboard-view">
+                <div class="dashboard-header">
+                    <h1 class="dashboard-title">Dashboard</h1>
+                    <p class="dashboard-subtitle">Bem-vindo ao VINTRA! Veja seus documentos recentes e estatísticas.</p>
+                </div>
+
+                <div class="welcome-message glow-effect">
+                    <div class="welcome-text">
+                        <h2>Olá, Dr. Santos!</h2>
+                        <p>Você tem 3 documentos recentes e 2 transcrições pendentes.</p>
+                        <button class="btn btn-primary" onclick="switchView('new')">
+                            <i class="fas fa-plus btn-icon"></i>
+                            Novo Documento
+                        </button>
+                    </div>
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAwIDEwMDAiPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZDEiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwQTBGMTYiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwQTBGMTYiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cG9seWdvbiBwb2ludHM9IjUwMCwxMDAgMTAwLDgwMCA5MDAsODAwIiBmaWxsPSIjMEEwRjE2Ii8+PHBhdGggZD0iTTE1MCw1MDAgTDMwMCw4MDAiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik0zNTAsMzAwIEw1MDAsODAwIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjI1IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNNTUwLDMwMCBMNzAwLDgwMCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+" alt="VINTRA Logo" style="height: 100px; width: auto;">
+                </div>
+
+                <div class="stat-cards">
+                    <div class="stat-card glow-effect">
+                        <div class="stat-card-title">
+                            <i class="fas fa-file-alt"></i>
+                            Total de Documentos
+                        </div>
+                        <div class="stat-card-value">24</div>
+                    </div>
+                    <div class="stat-card glow-effect">
+                        <div class="stat-card-title">
+                            <i class="fas fa-microphone"></i>
+                            Gravações de Áudio
+                        </div>
+                        <div class="stat-card-value">12</div>
+                    </div>
+                    <div class="stat-card glow-effect">
+                        <div class="stat-card-title">
+                            <i class="fas fa-clipboard-list"></i>
+                            Formatos VINTRA
+                        </div>
+                        <div class="stat-card-value">8</div>
+                    </div>
+                    <div class="stat-card glow-effect">
+                        <div class="stat-card-title">
+                            <i class="fas fa-user-friends"></i>
+                            Pacientes
+                        </div>
+                        <div class="stat-card-value">5</div>
+                    </div>
+                </div>
+
+                <div class="section-header">
+                    <h2 class="section-title">Documentos Recentes</h2>
+                    <a href="#todos-documentos" class="nav-item" onclick="switchView('library')">Ver Todos</a>
+                </div>
+
+                <div class="recent-items">
+                    <div class="recent-item glow-effect" data-id="doc1" onclick="switchView('library')">
+                        <div class="recent-item-icon" style="color: #8B5CF6;">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <div class="recent-item-info">
+                            <div class="recent-item-title">Entrevista_Maria.mp3</div>
+                            <div class="recent-item-meta">
+                                <span>Áudio</span>
+                                <div class="recent-item-meta-divider"></div>
+                                <span>25/03/2025</span>
+                                <div class="recent-item-meta-divider"></div>
+                                <span>10:30</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="recent-item glow-effect" data-id="doc2" onclick="switchView('library')">
+                        <div class="recent-item-icon" style="color: #6366F1;">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="recent-item-info">
+                            <div class="recent-item-title">Transcrição_Maria.txt</div>
+                            <div class="recent-item-meta">
+                                <span>Transcrição</span>
+                                <div class="recent-item-meta-divider"></div>
+                                <span>25/03/2025</span>
+                                <div class="recent-item-meta-divider"></div>
+                                <span>10:35</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="recent-item glow-effect" data-id="doc3" onclick="switchView('library')">
+                        <div class="recent-item-icon" style="color: #0EA5E9;">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <div class="recent-item-info">
+                            <div class="recent-item-title">VINTRA_Maria.txt</div>
+                            <div class="recent-item-meta">
+                                <span>VINTRA</span>
+                                <div class="recent-item-meta-divider"></div>
+                                <span>25/03/2025</span>
+                                <div class="recent-item-meta-divider"></div>
+                                <span>10:40</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="recent-item glow-effect" data-id="doc4" onclick="switchView('library')">
+                        <div class="recent-item-icon" style="color: #10B981;">
+                            <i class="fas fa-notes-medical"></i>
+                        </div>
+                        <div class="recent-item-info">
+                            <div class="recent-item-title">SOAP_Maria.txt</div>
+                            <div class="recent-item-meta">
+                                <span>SOAP</span>
+                                <div class="recent-item-meta-divider"></div>
+                                <span>25/03/2025</span>
+                                <div class="recent-item-meta-divider"></div>
+                                <span>10:45</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Document Library View -->
+            <div class="workspace" id="library-view" style="display: none;">
+                <div class="document-library">
+                    <div class="library-header">
+                        <h3 class="library-title">Minha Biblioteca</h3>
+                        <div class="library-actions">
+                            <button class="library-btn" onclick="switchView('new')">
+                                <i class="fas fa-plus"></i>
+                                Novo
+                            </button>
+                            <button class="library-btn" onclick="switchView('new')">
+                                <i class="fas fa-upload"></i>
+                                Upload
+                            </button>
+                        </div>
+                        <div class="library-search">
+                            <input type="text" class="library-search-input" placeholder="Buscar documentos...">
+                            <i class="fas fa-search library-search-icon"></i>
+                        </div>
+                        <div class="library-filters">
+                            <button class="library-filter active">Todos</button>
+                            <button class="library-filter">Áudios</button>
+                            <button class="library-filter">Transcrições</button>
+                            <button class="library-filter">VINTRA</button>
+                            <button class="library-filter">SOAP</button>
+                            <button class="library-filter">Narrativa</button>
+                        </div>
+                    </div>
+                    <div class="library-content">
+                        <div class="library-section">
+                            <div class="library-section-header">
+                                <div class="library-section-title">Recentes</div>
+                                <button class="library-section-action">Ver Todos</button>
+                            </div>
+                            <div class="document-item audio" data-id="doc1">
+                                <div class="document-icon">
+                                    <i class="fas fa-microphone"></i>
+                                </div>
+                                <div class="document-info">
+                                    <div class="document-title">Entrevista_Maria.mp3</div>
+                                    <div class="document-meta">25/03/2025 • 10:30 • 15.3 MB</div>
+                                </div>
+                                <div class="document-actions">
+                                    <button class="document-action-btn">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="document-item transcription active" data-id="doc2">
+                                <div class="document-icon">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                                <div class="document-info">
+                                    <div class="document-title">Transcrição_Maria.txt</div>
+                                    <div class="document-meta">25/03/2025 • 10:35 • 12.8 KB</div>
+                                </div>
+                                <div class="document-actions">
+                                    <button class="document-action-btn">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="document-item vintra" data-id="doc3">
+                                <div class="document-icon">
+                                    <i class="fas fa-clipboard-list"></i>
+                                </div>
+                                <div class="document-info">
+                                    <div class="document-title">VINTRA_Maria.txt</div>
+                                    <div class="document-meta">25/03/2025 • 10:40 • 14.5 KB</div>
+                                </div>
+                                <div class="document-actions">
+                                    <button class="document-action-btn">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="document-item soap" data-id="doc4">
+                                <div class="document-icon">
+                                    <i class="fas fa-notes-medical"></i>
+                                </div>
+                                <div class="document-info">
+                                    <div class="document-title">SOAP_Maria.txt</div>
+                                    <div class="document-meta">25/03/2025 • 10:45 • 9.2 KB</div>
+                                </div>
+                                <div class="document-actions">
+                                    <button class="document-action-btn">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="document-item narrative" data-id="doc5">
+                                <div class="document-icon">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <div class="document-info">
+                                    <div class="document-title">Narrativa_Maria.txt</div>
+                                    <div class="document-meta">25/03/2025 • 10:50 • 11.7 KB</div>
+                                </div>
+                                <div class="document-actions">
+                                    <button class="document-action-btn">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="library-section">
+                            <div class="library-section-header">
+                                <div class="library-section-title">Paciente: João Silva</div>
+                                <button class="library-section-action">Ver Todos</button>
+                            </div>
+                            <div class="document-item audio" data-id="doc6">
+                                <div class="document-icon">
+                                    <i class="fas fa-microphone"></i>
+                                </div>
+                                <div class="document-info">
+                                    <div class="document-title">Entrevista_JoaoSilva.mp3</div>
+                                    <div class="document-meta">20/03/2025 • 14:20 • 18.7 MB</div>
+                                </div>
+                                <div class="document-actions">
+                                    <button class="document-action-btn">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="document-item transcription" data-id="doc7">
+                                <div class="document-icon">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                                <div class="document-info">
+                                    <div class="document-title">Transcrição_JoaoSilva.txt</div>
+                                    <div class="document-meta">20/03/2025 • 14:25 • 15.3 KB</div>
+                                </div>
+                                <div class="document-actions">
+                                    <button class="document-action-btn">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="document-item vintra" data-id="doc8">
+                                <div class="document-icon">
+                                    <i class="fas fa-clipboard-list"></i>
+                                </div>
+                                <div class="document-info">
+                                    <div class="document-title">VINTRA_JoaoSilva.txt</div>
+                                    <div class="document-meta">20/03/2025 • 14:30 • 16.8 KB</div>
+                                </div>
+                                <div class="document-actions">
+                                    <button class="document-action-btn">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="document-workspace">
+                    <div class="document-toolbar">
+                        <div class="document-info-header">
+                            <div class="document-info-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="document-info-details">
+                                <h2>Transcrição_Maria.txt</h2>
+                                <div class="document-info-meta">
+                                    <span>Modificado: 25/03/2025 10:35</span>
+                                    <div class="document-info-meta-divider"></div>
+                                    <span>12.8 KB</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="document-toolbar-actions">
+                            <button class="toolbar-btn" id="editDocBtn">
+                                <i class="fas fa-edit"></i>
+                                Editar
+                            </button>
+                            <button class="toolbar-btn">
+                                <i class="fas fa-download"></i>
+                                Download
+                            </button>
+                            <button class="toolbar-btn primary" id="processDocBtn">
+                                <i class="fas fa-cogs"></i>
+                                Processar
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Focus Mode Button -->
+                    <button class="focus-mode-btn" id="focusModeToggle" title="Alternar Modo Foco">
+                        <i class="fas fa-expand-alt"></i>
+                    </button>
+                    <div class="document-content">
+                        <div class="document-container">
+                            <div class="document-view">
+Entrevista Clínica - 25 de Março de 2025
+
+Médico: Bom dia, Maria. Como você está se sentindo hoje?
+
+Paciente: Ah, doutor... não estou bem. A dor continua, sabe? Eu tomo os remédios, mas parece que não adianta muito. Durmo mal, acordo cansada. Às vezes acho que nunca vou melhorar.
+
+Médico: Entendo. Pode me falar mais sobre essa dor? Onde você sente mais intensamente?
+
+Paciente: É nas costas, na região lombar principalmente. Mas também tenho dor nas pernas, uma dormência às vezes. E dor de cabeça quase todo dia. Tomo dipirona direto.
+
+Médico: E quando começou isso? Você se lembra de algum evento específico?
+
+Paciente: Foi depois que meu marido faleceu, em janeiro. Ele era meu companheiro, meu amigo. E eu sinto muita falta, eu não me conformo... [paciente fica emocionada]. Depois disso, parece que meu corpo desabou. Antes eu tinha algumas dores, mas nada assim.
+
+Médico: Sinto muito pela sua perda, Maria. É um momento muito difícil mesmo. Como está seu sono?
+
+Paciente: Péssimo. Demoro pra dormir, acordo várias vezes de madrugada. Fico pensando nele, nas coisas que a gente fazia. Na nossa rotina. Aí tomo o clonazepam que o outro médico me receitou, mas mesmo assim...
+
+Médico: E seu apetite?
+
+Paciente: Diminuiu bastante. Não tenho vontade de cozinhar só pra mim. Era ele que gostava dos meus pratos. Às vezes fico o dia inteiro só com café. Emagreci quase 6 quilos nos últimos meses.
+
+Médico: Você tem conseguido sair de casa, encontrar amigos, familiares?
+
+Paciente: Pouco. Minhas filhas vêm me visitar, mas eu não tenho ânimo pra sair. Antes a gente ia na igreja juntos, no centro comunitário. Agora, não vejo sentido. Só saio pra ir no médico mesmo. E olha que já fui em vários. Ortopedista, neurologista, clínico... Todos pedem exames, receitam remédios, mas nada resolve.
+
+Médico: Você mencionou que toma clonazepam. Que outros medicamentos você está usando atualmente?
+
+Paciente: Deixa eu ver... Tem o clonazepam pra dormir, fluoxetina que o psiquiatra receitou, dipirona pra dor, omeprazol pro estômago. E agora o ortopedista me deu um anti-inflamatório também, mas me dá azia.
+
+Médico: Como você imagina sua vida daqui a um ano? O que você espera?
+
+Paciente: [silêncio longo] Não sei, doutor. Não consigo imaginar. Só queria que essa dor passasse. Que eu pudesse dormir uma noite inteira. Às vezes penso que vou viver assim pra sempre, com esse sofrimento. Não vejo muita perspectiva, não...
+                            </div>
+                        </div>
+                    </div>
+                    <div class="document-footer">
+                        <div class="document-status saved">
+                            <i class="fas fa-check-circle"></i>
+                            Todas as alterações salvas
+                        </div>
+                        <div class="document-footer-actions">
+                            <div class="processing-options">
+                                <div class="option">
+                                    <input type="radio" id="process-vintra" name="process-type" checked>
+                                    <label for="process-vintra">VINTRA</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" id="process-soap" name="process-type">
+                                    <label for="process-soap">SOAP</label>
+                                </div>
+                                <div class="option">
+                                    <input type="radio" id="process-narrative" name="process-type">
+                                    <label for="process-narrative">Narrativa</label>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" id="processFooterBtn">
+                                <i class="fas fa-cogs btn-icon"></i>
+                                Processar Documento
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Document View -->
+            <div class="workspace" id="new-view" style="display: none;">
+                <div class="document-library">
+                    <div class="library-header">
+                        <h3 class="library-title">Novo Documento</h3>
+                        <div class="library-filters">
+                            <button class="library-filter active" data-new-tab="record">Gravar</button>
+                            <button class="library-filter" data-new-tab="upload">Upload</button>
+                            <button class="library-filter" data-new-tab="transcribe">Transcrição</button>
+                        </div>
+                    </div>
+                    <div class="library-content">
+                        <div class="library-section">
+                            <div class="library-section-header">
+                                <div class="library-section-title">Pacientes</div>
+                            </div>
+                            <div class="document-item" data-id="patient1" onclick="selectPatient('Maria')">
+                                <div class="document-icon">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="document-info">
+                                    <div class="document-title">Maria</div>
+                                    <div class="document-meta">45 anos • 5 documentos</div>
+                                </div>
+                            </div>
+                            <div class="document-item" data-id="patient2" onclick="selectPatient('João Silva')">
+                                <div class="document-icon">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="document-info">
+                                    <div class="document-title">João Silva</div>
+                                    <div class="document-meta">38 anos • 3 documentos</div>
+                                </div>
+                            </div>
+                            <div class="document-item" data-id="patient3" onclick="selectPatient('Ana Santos')">
+                                <div class="document-icon">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="document-info">
+                                    <div class="document-title">Ana Santos</div>
+                                    <div class="document-meta">42 anos • 2 documentos</div>
+                                </div>
+                            </div>
+                            <div class="document-item" data-id="patient4" onclick="selectPatient('Roberto Almeida')">
+                                <div class="document-icon">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="document-info">
+                                    <div class="document-title">Roberto Almeida</div>
+                                    <div class="document-meta">52 anos • 1 documento</div>
+                                </div>
+                            </div>
+                            <div class="document-item" data-id="patient5" onclick="selectPatient('Carla Oliveira')">
+                                <div class="document-icon">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="document-info">
+                                    <div class="document-title">Carla Oliveira</div>
+                                    <div class="document-meta">36 anos • 1 documento</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="document-workspace">
+                    <div class="document-toolbar">
+                        <div class="document-info-header">
+                            <div class="document-info-icon">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div class="document-info-details">
+                                <h2>Novo Documento</h2>
+                                <div class="document-info-meta">
+                                    <span id="selectedPatientInfo">Paciente: Não selecionado</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="document-toolbar-actions">
+                            <button class="toolbar-btn" id="selectPatientBtn">
+                                <i class="fas fa-user"></i>
+                                Selecionar Paciente
+                            </button>
+                        </div>
+                    </div>
+                    <div class="document-content">
+                        <div class="document-container">
+                            <!-- Tab 1: Gravação -->
+                            <div class="recording-module glow-effect" id="record-tab">
+                                <div class="recording-header">
+                                    <h2 class="recording-title">Gravação de Áudio</h2>
+                                    <p class="recording-subtitle">Grave uma sessão para transcrição automática</p>
+                                </div>
+                                <div class="recording-controls">
+                                    <button class="recording-btn recording-btn-start" id="startRecordingBtn">
+                                        <i class="fas fa-microphone"></i>
+                                    </button>
+                                    <button class="recording-btn recording-btn-stop" id="stopRecordingBtn" style="display: none;">
+                                        <i class="fas fa-stop"></i>
+                                    </button>
+                                    <button class="recording-btn recording-btn-pause" id="pauseRecordingBtn" style="display: none;">
+                                        <i class="fas fa-pause"></i>
+                                    </button>
+                                </div>
+                                <div class="recording-timer">
+                                    <div class="recording-time" id="recordingTime">00:00:00</div>
+                                    <div class="recording-status" id="recordingStatus">Pronto para gravar</div>
+                                </div>
+                                <div class="recording-visualizer">
+                                    <div class="visualizer-bars" id="visualizerBars">
+                                        <!-- Bars will be added dynamically -->
+                                    </div>
+                                </div>
+                                <div class="diarization-option">
+                                    <input type="checkbox" id="diarizationCheckbox" class="diarization-checkbox">
+                                    <label for="diarizationCheckbox" class="diarization-label">Habilitar Diarização (Identificação de Falantes)</label>
+                                </div>
+                                <div class="progress-container" id="recordingProgress" style="display: none;">
+                                    <div class="progress-header">
+                                        <div class="progress-title">Processando gravação</div>
+                                        <div class="progress-percentage" id="recordingProgressPercentage">0%</div>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="recordingProgressBar" style="width: 0%"></div>
+                                    </div>
+                                    <div class="progress-status" id="recordingProgressStatus">Iniciando processamento...</div>
+                                </div>
+                                <div class="upload-preview" id="recordingPreview">
+                                    <div class="upload-preview-icon">
+                                        <i class="fas fa-file-audio"></i>
+                                    </div>
+                                    <div class="upload-preview-info">
+                                        <div class="upload-preview-name" id="recordingFileName">Gravação_25032025.mp3</div>
+                                        <div class="upload-preview-meta" id="recordingFileMeta">15.3 MB • 28:45</div>
+                                    </div>
+                                    <button class="upload-preview-remove" id="recordingRemoveBtn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div style="display: flex; justify-content: center;">
+                                    <button class="btn btn-primary" id="processRecordingBtn">
+                                        <i class="fas fa-play btn-icon"></i>
+                                        Iniciar Transcrição
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Tab 2: Upload -->
+                            <div class="upload-module glow-effect" id="upload-tab" style="display: none;">
+                                <div class="upload-header">
+                                    <h2 class="upload-title">Upload de Arquivo</h2>
+                                    <p class="upload-subtitle">Carregue um arquivo de áudio ou documento de texto</p>
+                                </div>
+                                <div class="upload-area" id="uploadArea">
+                                    <input type="file" id="uploadInput" class="upload-input" accept="audio/*,.txt,.md,.doc,.docx">
+                                    <div class="upload-icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </div>
+                                    <div class="upload-message">Arraste arquivos aqui ou clique para selecionar</div>
+                                    <div class="upload-hint">Suporta arquivos de áudio (MP3, WAV, M4A) e documentos (TXT, DOC, DOCX)</div>
+                                </div>
+                                <div class="diarization-option">
+                                    <input type="checkbox" id="uploadDiarizationCheckbox" class="diarization-checkbox">
+                                    <label for="uploadDiarizationCheckbox" class="diarization-label">Habilitar Diarização para áudios (Identificação de Falantes)</label>
+                                </div>
+                                <div class="upload-preview" id="uploadPreview">
+                                    <div class="upload-preview-icon">
+                                        <i class="fas fa-file"></i>
+                                    </div>
+                                    <div class="upload-preview-info">
+                                        <div class="upload-preview-name" id="uploadFileName">arquivo.mp3</div>
+                                        <div class="upload-preview-meta" id="uploadFileMeta">15.3 MB</div>
+                                    </div>
+                                    <button class="upload-preview-remove" id="uploadRemoveBtn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div class="progress-container" id="uploadProgress" style="display: none;">
+                                    <div class="progress-header">
+                                        <div class="progress-title">Processando upload</div>
+                                        <div class="progress-percentage" id="uploadProgressPercentage">0%</div>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="uploadProgressBar" style="width: 0%"></div>
+                                    </div>
+                                    <div class="progress-status" id="uploadProgressStatus">Iniciando upload...</div>
+                                </div>
+                                <div style="display: flex; justify-content: center;">
+                                    <button class="btn btn-primary" id="processUploadBtn">
+                                        <i class="fas fa-upload btn-icon"></i>
+                                        Fazer Upload
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Tab 3: Transcrição Manual -->
+                            <div class="upload-module glow-effect" id="transcribe-tab" style="display: none;">
+                                <div class="upload-header">
+                                    <h2 class="upload-title">Transcrição Manual</h2>
+                                    <p class="upload-subtitle">Digite ou cole a transcrição da consulta</p>
+                                </div>
+                                <textarea class="document-edit" id="transcriptionText" placeholder="Digite ou cole o texto da transcrição aqui..."></textarea>
+                                <div class="document-format-options">
+                                    <div class="document-format-option active">VINTRA</div>
+                                    <div class="document-format-option">SOAP</div>
+                                    <div class="document-format-option">Narrativa</div>
+                                </div>
+                                <div style="display: flex; justify-content: center; margin-top: 1.5rem;">
+                                    <button class="btn btn-primary" id="processTranscriptionBtn">
+                                        <i class="fas fa-cogs btn-icon"></i>
+                                        Processar Transcrição
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other Views -->
+            <div class="dashboard" id="patients-view" style="display: none;">
+                <div class="dashboard-header">
+                    <h1 class="dashboard-title">Pacientes</h1>
+                    <p class="dashboard-subtitle">Gerencie seus pacientes e seus documentos associados.</p>
+                </div>
+                <!-- Pacientes content would go here -->
+                <div class="document-empty">
+                    <div class="document-empty-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h2 class="document-empty-title">Área de Pacientes</h2>
+                    <p class="document-empty-text">Esta área está em desenvolvimento. Em breve você poderá gerenciar todos os seus pacientes e seus respectivos documentos.</p>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus btn-icon"></i>
+                        Adicionar Paciente
+                    </button>
+                </div>
+            </div>
+
+            <div class="dashboard" id="reports-view" style="display: none;">
+                <div class="dashboard-header">
+                    <h1 class="dashboard-title">Relatórios</h1>
+                    <p class="dashboard-subtitle">Veja estatísticas e relatórios de utilização.</p>
+                </div>
+                <!-- Relatórios content would go here -->
+                <div class="document-empty">
+                    <div class="document-empty-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h2 class="document-empty-title">Área de Relatórios</h2>
+                    <p class="document-empty-text">Esta área está em desenvolvimento. Em breve você poderá gerar relatórios detalhados sobre seus documentos e pacientes.</p>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-chart-line btn-icon"></i>
+                        Gerar Relatório
+                    </button>
+                </div>
+            </div>
+
+            <div class="dashboard" id="settings-view" style="display: none;">
+                <div class="dashboard-header">
+                    <h1 class="dashboard-title">Configurações</h1>
+                    <p class="dashboard-subtitle">Personalize sua experiência no VINTRA.</p>
+                </div>
+                <!-- Configurações content would go here -->
+                <div class="document-empty">
+                    <div class="document-empty-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h2 class="document-empty-title">Área de Configurações</h2>
+                    <p class="document-empty-text">Esta área está em desenvolvimento. Em breve você poderá personalizar várias configurações do sistema VINTRA.</p>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-save btn-icon"></i>
+                        Salvar Preferências
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container">
+        <!-- Toasts will be added dynamically -->
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Título do Modal</h3>
+                <button class="modal-close" id="modalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Modal content will be added dynamically -->
+            </div>
+            <div class="modal-footer" id="modalFooter">
+                <button class="btn btn-secondary" id="modalCancelBtn">Cancelar</button>
+                <button class="btn btn-primary" id="modalConfirmBtn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for VINTRA application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Global Variables
+            let currentView = 'dashboard';
+            let isRecording = false;
+            let recordingTimer = null;
+            let recordingSeconds = 0;
+            let selectedPatient = null;
+            let isEditMode = false;
+            let isFocusMode = false;
+            let lastEditTime = Date.now();
+            
+            // DOM Elements
+            const loginScreen = document.getElementById('loginScreen');
+            const appContainer = document.getElementById('appContainer');
+            const loginForm = document.getElementById('loginForm');
+            const passwordError = document.getElementById('passwordError');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.querySelector('.app-sidebar');
+            const navItems = document.querySelectorAll('.nav-item');
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            const processDocBtn = document.getElementById('processDocBtn');
+            const processFooterBtn = document.getElementById('processFooterBtn');
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modalClose = document.getElementById('modalClose');
+            const modalCancelBtn = document.getElementById('modalCancelBtn');
+            const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+            const views = document.querySelectorAll('[id$="-view"]');
+            const newTabButtons = document.querySelectorAll('[data-new-tab]');
+            const newTabs = document.querySelectorAll('#record-tab, #upload-tab, #transcribe-tab');
+            const selectedPatientInfo = document.getElementById('selectedPatientInfo');
+
+            // Initialize fluid animations
+            initFluidAnimations();
+            
+            // Login functionality with smooth transition
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const password = document.getElementById('password').value;
+                
+                // Simple password validation (in production use secure authentication)
+                if (password === 'vintra123') {
+                    gsap.to(".login-container", {
+                        y: -20,
+                        opacity: 0,
+                        duration: 0.6,
+                        ease: "power2.inOut"
+                    });
+                    
+                    loginScreen.classList.add('hidden');
+                    setTimeout(() => {
+                        loginScreen.style.display = 'none';
+                        appContainer.style.display = 'flex';
+                        
+                        // Animate app elements entrance
+                        gsap.from(".app-header", {
+                            y: -20,
+                            opacity: 0,
+                            duration: 0.8,
+                            ease: "power2.out"
+                        });
+                        
+                        gsap.from(".app-sidebar", {
+                            x: -20,
+                            opacity: 0,
+                            duration: 0.8,
+                            delay: 0.2,
+                            ease: "power2.out"
+                        });
+                        
+                        gsap.from(".dashboard", {
+                            opacity: 0,
+                            duration: 0.8,
+                            delay: 0.4,
+                            ease: "power2.out"
+                        });
+                        
+                        // Stagger stat cards entrance
+                        gsap.from(".stat-card", {
+                            y: 30,
+                            opacity: 0,
+                            duration: 0.8,
+                            delay: 0.6,
+                            stagger: 0.1,
+                            ease: "power2.out"
+                        });
+                        
+                        // Stagger recent items entrance
+                        gsap.from(".recent-item", {
+                            x: 30,
+                            opacity: 0,
+                            duration: 0.6,
+                            delay: 0.8,
+                            stagger: 0.1,
+                            ease: "power2.out"
+                        });
+                    }, 600);
+                } else {
+                    // Shake effect for error
+                    gsap.to(".login-container", {
+                        x: [-10, 10, -10, 10, 0],
+                        duration: 0.4,
+                        ease: "power2.inOut"
+                    });
+                    passwordError.style.display = 'block';
+                }
+            });
+
+            // Logout functionality
+            logoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Animate exit
+                gsap.to(".app-main", {
+                    opacity: 0,
+                    y: 20,
+                    duration: 0.5,
+                    ease: "power2.inOut",
+                    onComplete: () => {
+                        appContainer.style.display = 'none';
+                        loginScreen.style.display = 'flex';
+                        setTimeout(() => {
+                            loginScreen.classList.remove('hidden');
+                            gsap.fromTo(".login-container", 
+                                {y: 30, opacity: 0},
+                                {y: 0, opacity: 1, duration: 0.8, delay: 0.2, ease: "power2.out"}
+                            );
+                            document.getElementById('password').value = '';
+                            passwordError.style.display = 'none';
+                        }, 10);
+                    }
+                });
+            });
+
+            // Sidebar toggle with fluid animation
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('expanded');
+                
+                if (sidebar.classList.contains('expanded')) {
+                    gsap.fromTo('.sidebar-link span', 
+                        {opacity: 0, x: -10},
+                        {opacity: 1, x: 0, stagger: 0.05, duration: 0.4, ease: "power2.out"}
+                    );
+                }
+            });
+
+            // Navigation with fluid transitions
+            window.switchView = function(viewId) {
+                if (currentView === viewId) return;
+                
+                // Get current and new view elements
+                const currentViewElem = document.getElementById(`${currentView}-view`);
+                const newViewElem = document.getElementById(`${viewId}-view`);
+                
+                // Animate transition between views
+                gsap.to(currentViewElem, {
+                    opacity: 0,
+                    y: 20,
+                    duration: 0.4,
+                    ease: "power2.inOut",
+                    onComplete: () => {
+                        currentViewElem.style.display = 'none';
+                        
+                        // Show new view
+                        newViewElem.style.display = 
+                            viewId === 'dashboard' || viewId === 'patients' || viewId === 'reports' || viewId === 'settings' 
+                                ? 'block' 
+                                : 'flex';
+                        
+                        // Animate new view entrance
+                        gsap.fromTo(newViewElem, 
+                            {opacity: 0, y: -20},
+                            {opacity: 1, y: 0, duration: 0.5, ease: "power2.out"}
+                        );
+                        
+                        // Additional animations for specific views
+                        if (viewId === 'library') {
+                            // Stagger document items entrance
+                            gsap.fromTo(".document-item", 
+                                {x: -20, opacity: 0},
+                                {x: 0, opacity: 1, stagger: 0.03, delay: 0.2, duration: 0.5, ease: "power2.out"}
+                            );
+                        } else if (viewId === 'new') {
+                            // Animate recording module entrance
+                            gsap.fromTo(".recording-module, .upload-module", 
+                                {y: 20, opacity: 0},
+                                {y: 0, opacity: 1, delay: 0.2, duration: 0.6, ease: "power2.out"}
+                            );
+                        }
+                    }
+                });
+                
+                currentView = viewId;
+                
+                // Update active nav items
+                navItems.forEach(item => {
+                    if (item.dataset.target === viewId) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+                
+                // Update active sidebar links
+                sidebarLinks.forEach(link => {
+                    if (link.dataset.target === viewId) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            }
+
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    switchView(this.dataset.target);
+                });
+            });
+
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    switchView(this.dataset.target);
+                });
+            });
+
+            // Patient selection with toast notification
+            window.selectPatient = function(patientName) {
+                selectedPatient = patientName;
+                selectedPatientInfo.textContent = `Paciente: ${patientName}`;
+                
+                // Animate patient selection update
+                gsap.fromTo("#selectedPatientInfo", 
+                    {y: -10, opacity: 0},
+                    {y: 0, opacity: 1, duration: 0.4, ease: "power2.out"}
+                );
+                
+                showToast('success', 'Paciente selecionado', `${patientName} foi selecionado para o novo documento.`);
+            }
+
+            // New Document tabs
+            newTabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    newTabButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Get selected tab
+                    const tabId = this.dataset.newTab + '-tab';
+                    const selectedTab = document.getElementById(tabId);
+                    
+                    // Hide all tabs with animation
+                    newTabs.forEach(tab => {
+                        if (tab.id !== tabId && tab.style.display !== 'none') {
+                            gsap.to(tab, {
+                                opacity: 0,
+                                y: 20,
+                                duration: 0.3,
+                                ease: "power2.inOut",
+                                onComplete: () => {
+                                    tab.style.display = 'none';
+                                    
+                                    // Show selected tab with animation
+                                    selectedTab.style.display = 'block';
+                                    gsap.fromTo(selectedTab, 
+                                        {opacity: 0, y: -20},
+                                        {opacity: 1, y: 0, duration: 0.4, ease: "power2.out"}
+                                    );
+                                }
+                            });
+                        } else if (tab.id === tabId && tab.style.display === 'none') {
+                            // Direct show if no hiding animation needed
+                            tab.style.display = 'block';
+                            gsap.fromTo(tab, 
+                                {opacity: 0, y: -20},
+                                {opacity: 1, y: 0, duration: 0.4, ease: "power2.out"}
+                            );
+                        }
+                    });
+                });
+            });
+
+            // Document Library functionality
+            const documentItems = document.querySelectorAll('.document-item');
+            documentItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    documentItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // In a real app, load document content here
+                });
+            });
+
+            // Process Document Button
+            if (processDocBtn) {
+                processDocBtn.addEventListener('click', function() {
+                    showProcessingModal();
+                });
+            }
+
+            if (processFooterBtn) {
+                processFooterBtn.addEventListener('click', function() {
+                    showProcessingModal();
+                });
+            }
+
+            // Show processing modal
+            function showProcessingModal() {
+                const selectedOption = document.querySelector('input[name="process-type"]:checked').id;
+                let processType = 'VINTRA';
+                
+                if (selectedOption === 'process-soap') {
+                    processType = 'SOAP';
+                } else if (selectedOption === 'process-narrative') {
+                    processType = 'Narrativa';
+                }
+                
+                showModal(
+                    'Processar Documento', 
+                    `<p>Você está prestes a processar o documento <strong>Transcrição_Maria.txt</strong> para o formato <strong>${processType}</strong>.</p>
+                    <p>Esse processo irá gerar um novo documento na sua biblioteca. Deseja continuar?</p>`,
+                    'Cancelar',
+                    'Processar',
+                    function() {
+                        hideModal();
+                    },
+                    function() {
+                        hideModal();
+                        showProcessingProgress(processType);
+                    }
+                );
+            }
+
+            // Simulate processing progress
+            function showProcessingProgress(processType) {
+                showModal(
+                    'Processando Documento',
+                    `<div class="progress-container">
+                        <div class="progress-header">
+                            <div class="progress-title">Processando para formato ${processType}</div>
+                            <div class="progress-percentage" id="modalProgressPercentage">0%</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="modalProgressBar" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-status" id="modalProgressStatus">Iniciando processamento...</div>
+                    </div>`,
+                    null,
+                    null,
+                    null,
+                    null
+                );
+
+                // Disable close buttons during processing
+                document.getElementById('modalClose').style.display = 'none';
+                document.getElementById('modalFooter').style.display = 'none';
+
+                // Simulate progress
+                let progress = 0;
+                const progressBar = document.getElementById('modalProgressBar');
+                const progressPercentage = document.getElementById('modalProgressPercentage');
+                const progressStatus = document.getElementById('modalProgressStatus');
+                
+                const statuses = [
+                    'Iniciando processamento...',
+                    'Analisando texto...',
+                    'Identificando padrões...',
+                    'Aplicando algoritmos de processamento...',
+                    'Gerando documento...',
+                    'Finalizando...'
+                ];
+                
+                const interval = setInterval(() => {
+                    progress += Math.random() * 15;
+                    
+                    if (progress >= 100) {
+                        progress = 100;
+                        clearInterval(interval);
+                        
+                        setTimeout(() => {
+                            hideModal();
+                            showToast('success', 'Processamento concluído', `Documento processado com sucesso para formato ${processType}.`);
+                        }, 1000);
+                    }
+                    
+                    progressBar.style.width = `${progress}%`;
+                    progressPercentage.textContent = `${Math.floor(progress)}%`;
+                    
+                    const statusIndex = Math.min(
+                        Math.floor(progress / 20),
+                        statuses.length - 1
+                    );
+                    progressStatus.textContent = statuses[statusIndex];
+                }, 600);
+            }
+
+            // Recording functionality
+            const startRecordingBtn = document.getElementById('startRecordingBtn');
+            const stopRecordingBtn = document.getElementById('stopRecordingBtn');
+            const pauseRecordingBtn = document.getElementById('pauseRecordingBtn');
+            const recordingTime = document.getElementById('recordingTime');
+            const recordingStatus = document.getElementById('recordingStatus');
+            const visualizerBars = document.getElementById('visualizerBars');
+            const recordingProgress = document.getElementById('recordingProgress');
+            const recordingProgressBar = document.getElementById('recordingProgressBar');
+            const recordingProgressStatus = document.getElementById('recordingProgressStatus');
+            const recordingProgressPercentage = document.getElementById('recordingProgressPercentage');
+            const processRecordingBtn = document.getElementById('processRecordingBtn');
+            
+            if (startRecordingBtn) {
+                startRecordingBtn.addEventListener('click', function() {
+                    if (!selectedPatient) {
+                        showToast('warning', 'Paciente não selecionado', 'Por favor, selecione um paciente antes de iniciar a gravação.');
+                        return;
+                    }
+                    
+                    isRecording = true;
+                    
+                    // Animate recording button transition
+                    gsap.to(startRecordingBtn, {
+                        scale: 0.8,
+                        opacity: 0,
+                        duration: 0.3,
+                        ease: "power2.inOut",
+                        onComplete: () => {
+                            startRecordingBtn.style.display = 'none';
+                            stopRecordingBtn.style.display = 'block';
+                            pauseRecordingBtn.style.display = 'block';
+                            
+                            // Animate other buttons appearing
+                            gsap.fromTo([stopRecordingBtn, pauseRecordingBtn], 
+                                {scale: 0.8, opacity: 0},
+                                {scale: 1, opacity: 1, duration: 0.3, stagger: 0.1, ease: "back.out(1.5)"}
+                            );
+                        }
+                    });
+                    
+                    recordingStatus.textContent = 'Gravando...';
+                    
+                    // Start timer
+                    recordingSeconds = 0;
+                    updateRecordingTime();
+                    recordingTimer = setInterval(updateRecordingTime, 1000);
+                    
+                    // Create audio visualizer
+                    createVisualizer();
+                });
+            }
+            
+            if (stopRecordingBtn) {
+                stopRecordingBtn.addEventListener('click', function() {
+                    isRecording = false;
+                    clearInterval(recordingTimer);
+                    
+                    // Animate buttons transition
+                    gsap.to([stopRecordingBtn, pauseRecordingBtn], {
+                        scale: 0.8,
+                        opacity: 0,
+                        duration: 0.3,
+                        ease: "power2.inOut",
+                        onComplete: () => {
+                            stopRecordingBtn.style.display = 'none';
+                            pauseRecordingBtn.style.display = 'none';
+                            startRecordingBtn.style.display = 'block';
+                            
+                            // Animate start button appearing
+                            gsap.fromTo(startRecordingBtn, 
+                                {scale: 0.8, opacity: 0},
+                                {scale: 1, opacity: 1, duration: 0.3, ease: "back.out(1.5)"}
+                            );
+                        }
+                    });
+                    
+                    recordingStatus.textContent = 'Processando gravação...';
+                    
+                    // Show processing with animation
+                    recordingProgress.style.display = 'block';
+                    gsap.fromTo(recordingProgress,
+                        {opacity: 0, y: 20},
+                        {opacity: 1, y: 0, duration: 0.4, ease: "power2.out"}
+                    );
+                    
+                    simulateProcessing(
+                        recordingProgressBar, 
+                        recordingProgressPercentage, 
+                        recordingProgressStatus,
+                        function() {
+                            // Fade out progress indicator
+                            gsap.to(recordingProgress, {
+                                opacity: 0,
+                                duration: 0.4,
+                                ease: "power2.inOut",
+                                onComplete: () => {
+                                    recordingProgress.style.display = 'none';
+                                    recordingStatus.textContent = 'Gravação concluída';
+                                    
+                                    // Show recording preview with animation
+                                    document.getElementById('recordingPreview').classList.add('visible');
+                                    gsap.fromTo('#recordingPreview',
+                                        {opacity: 0, y: 20},
+                                        {opacity: 1, y: 0, duration: 0.5, ease: "power2.out"}
+                                    );
+                                    
+                                    showToast('success', 'Gravação concluída', 'Sua gravação foi processada com sucesso. Clique em "Iniciar Transcrição" para continuar.');
+                                }
+                            });
+                        }
+                    );
+                });
+            }
+            
+            if (processRecordingBtn) {
+                processRecordingBtn.addEventListener('click', function() {
+                    const diarizationEnabled = document.getElementById('diarizationCheckbox').checked;
+                    showModal(
+                        'Iniciar Transcrição', 
+                        `<p>Você está prestes a iniciar a transcrição da gravação${diarizationEnabled ? ' com diarização (identificação de falantes)' : ''}.</p>
+                        <p>Este processo pode levar alguns minutos, dependendo do tamanho do arquivo. Deseja continuar?</p>`,
+                        'Cancelar',
+                        'Iniciar Transcrição',
+                        function() {
+                            hideModal();
+                        },
+                        function() {
+                            hideModal();
+                            simulateTranscription(diarizationEnabled);
+                        }
+                    );
+                });
+            }
+            
+            // Upload functionality
+            const uploadArea = document.getElementById('uploadArea');
+            const uploadInput = document.getElementById('uploadInput');
+            const uploadPreview = document.getElementById('uploadPreview');
+            const uploadFileName = document.getElementById('uploadFileName');
+            const uploadFileMeta = document.getElementById('uploadFileMeta');
+            const uploadProgress = document.getElementById('uploadProgress');
+            const uploadProgressBar = document.getElementById('uploadProgressBar');
+            const uploadProgressStatus = document.getElementById('uploadProgressStatus');
+            const uploadProgressPercentage = document.getElementById('uploadProgressPercentage');
+            const processUploadBtn = document.getElementById('processUploadBtn');
+            
+            if (uploadArea) {
+                uploadArea.addEventListener('click', function() {
+                    if (!selectedPatient) {
+                        showToast('warning', 'Paciente não selecionado', 'Por favor, selecione um paciente antes de fazer upload.');
+                        return;
+                    }
+                    uploadInput.click();
+                });
+                
+                uploadArea.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('dragover');
+                });
+                
+                uploadArea.addEventListener('dragleave', function() {
+                    this.classList.remove('dragover');
+                });
+                
+                uploadArea.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                    
+                    if (!selectedPatient) {
+                        showToast('warning', 'Paciente não selecionado', 'Por favor, selecione um paciente antes de fazer upload.');
+                        return;
+                    }
+                    
+                    if (e.dataTransfer.files.length) {
+                        handleUploadFile(e.dataTransfer.files[0]);
+                    }
+                });
+                
+                if (uploadInput) {
+                    uploadInput.addEventListener('change', function() {
+                        if (this.files.length) {
+                            handleUploadFile(this.files[0]);
+                        }
+                    });
+                }
+                
+                if (processUploadBtn) {
+                    processUploadBtn.addEventListener('click', function() {
+                        const diarizationEnabled = document.getElementById('uploadDiarizationCheckbox').checked;
+                        const fileName = uploadFileName.textContent;
+                        const isAudio = fileName.toLowerCase().endsWith('.mp3') || fileName.toLowerCase().endsWith('.wav') || fileName.toLowerCase().endsWith('.m4a');
+                        
+                        if (isAudio) {
+                            showModal(
+                                'Processar Arquivo de Áudio', 
+                                `<p>Você está prestes a fazer upload e transcrever o arquivo de áudio${diarizationEnabled ? ' com diarização (identificação de falantes)' : ''}.</p>
+                                <p>Este processo pode levar alguns minutos, dependendo do tamanho do arquivo. Deseja continuar?</p>`,
+                                'Cancelar',
+                                'Iniciar Processamento',
+                                function() {
+                                    hideModal();
+                                },
+                                function() {
+                                    hideModal();
+                                    // Show upload progress with animation
+                                    uploadProgress.style.display = 'block';
+                                    gsap.fromTo(uploadProgress,
+                                        {opacity: 0, y: 20},
+                                        {opacity: 1, y: 0, duration: 0.4, ease: "power2.out"}
+                                    );
+                                    
+                                    simulateProcessing(
+                                        uploadProgressBar, 
+                                        uploadProgressPercentage, 
+                                        uploadProgressStatus,
+                                        function() {
+                                            // Fade out progress
+                                            gsap.to(uploadProgress, {
+                                                opacity: 0,
+                                                duration: 0.4,
+                                                ease: "power2.inOut",
+                                                onComplete: () => {
+                                                    uploadProgress.style.display = 'none';
+                                                    simulateTranscription(diarizationEnabled);
+                                                }
+                                            });
+                                        }
+                                    );
+                                }
+                            );
+                        } else {
+                            // Show upload progress with animation
+                            uploadProgress.style.display = 'block';
+                            gsap.fromTo(uploadProgress,
+                                {opacity: 0, y: 20},
+                                {opacity: 1, y: 0, duration: 0.4, ease: "power2.out"}
+                            );
+                            
+                            simulateProcessing(
+                                uploadProgressBar, 
+                                uploadProgressPercentage, 
+                                uploadProgressStatus,
+                                function() {
+                                    // Fade out progress
+                                    gsap.to(uploadProgress, {
+                                        opacity: 0,
+                                        duration: 0.4,
+                                        ease: "power2.inOut",
+                                        onComplete: () => {
+                                            uploadProgress.style.display = 'none';
+                                            showToast('success', 'Upload concluído', 'Seu arquivo foi enviado com sucesso e está disponível na sua biblioteca.');
+                                            switchView('library');
+                                        }
+                                    });
+                                }
+                            );
+                        }
+                    });
+                }
+            }
+
+            // Transcription tab
+            const processTranscriptionBtn = document.getElementById('processTranscriptionBtn');
+            if (processTranscriptionBtn) {
+                processTranscriptionBtn.addEventListener('click', function() {
+                    const transcriptionText = document.getElementById('transcriptionText').value.trim();
+                    
+                    if (!selectedPatient) {
+                        showToast('warning', 'Paciente não selecionado', 'Por favor, selecione um paciente antes de processar a transcrição.');
+                        return;
+                    }
+                    
+                    if (!transcriptionText) {
+                        showToast('error', 'Texto vazio', 'Por favor, digite ou cole um texto para transcrição.');
+                        return;
+                    }
+                    
+                    const formatOption = document.querySelector('.document-format-option.active').textContent;
+                    
+                    showModal(
+                        'Processar Transcrição', 
+                        `<p>Você está prestes a processar a transcrição para o formato <strong>${formatOption}</strong>.</p>
+                        <p>Este processo irá gerar um novo documento na biblioteca. Deseja continuar?</p>`,
+                        'Cancelar',
+                        'Processar',
+                        function() {
+                            hideModal();
+                        },
+                        function() {
+                            hideModal();
+                            showProcessingProgress(formatOption);
+                        }
+                    );
+                });
+                
+                // Format options
+                const formatOptions = document.querySelectorAll('.document-format-option');
+                formatOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        // Animate selection change
+                        gsap.to(document.querySelector('.document-format-option.active'), {
+                            backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                            color: 'var(--text-primary)',
+                            duration: 0.3,
+                            ease: "power2.inOut"
+                        });
+                        
+                        formatOptions.forEach(opt => opt.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        gsap.to(this, {
+                            backgroundColor: 'var(--gray-900)',
+                            color: 'white',
+                            duration: 0.3,
+                            ease: "power2.inOut"
+                        });
+                    });
+                });
+            }
+
+            // Simulate transcription process
+            function simulateTranscription(diarization) {
+                showModal(
+                    'Transcrevendo Áudio',
+                    `<div class="progress-container">
+                        <div class="progress-header">
+                            <div class="progress-title">Processando transcrição${diarization ? ' com diarização' : ''}</div>
+                            <div class="progress-percentage" id="transcriptionProgressPercentage">0%</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="transcriptionProgressBar" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-status" id="transcriptionProgressStatus">Iniciando transcrição...</div>
+                    </div>`,
+                    null,
+                    null,
+                    null,
+                    null
+                );
+
+                // Disable close buttons during processing
+                document.getElementById('modalClose').style.display = 'none';
+                document.getElementById('modalFooter').style.display = 'none';
+
+                // Simulate progress with GSAP
+                const progressBar = document.getElementById('transcriptionProgressBar');
+                const progressPercentage = document.getElementById('transcriptionProgressPercentage');
+                const progressStatus = document.getElementById('transcriptionProgressStatus');
+                
+                const statuses = [
+                    'Iniciando transcrição...',
+                    'Processando áudio...',
+                    'Analisando fala...',
+                    diarization ? 'Identificando falantes...' : 'Convertendo para texto...',
+                    'Estruturando documento...',
+                    'Finalizando...'
+                ];
+                
+                let currentStatus = 0;
+                
+                // Use GSAP timeline for smoother sequential progress animations
+                const tl = gsap.timeline({
+                    onComplete: () => {
+                        setTimeout(() => {
+                            hideModal();
+                            showToast('success', 'Transcrição concluída', 'Áudio transcrito com sucesso. O documento foi adicionado à sua biblioteca.');
+                            switchView('library');
+                        }, 1000);
+                    }
+                });
+                
+                // Segment the timeline into phases
+                tl.to(progressBar, {
+                    width: "20%", 
+                    duration: 2, 
+                    ease: "power1.inOut",
+                    onStart: () => {
+                        progressPercentage.textContent = "0%";
+                        progressStatus.textContent = statuses[0];
+                    },
+                    onUpdate: () => {
+                        progressPercentage.textContent = `${Math.floor(parseFloat(progressBar.style.width))}%`;
+                    }
+                });
+                
+                // Continue with subsequent phases
+                for (let i = 1; i < statuses.length; i++) {
+                    const segmentDuration = 1.5 + Math.random() * 1.5; // Varied duration for natural feel
+                    const targetPercent = (i + 1) * 20;
+                    
+                    tl.to(progressBar, {
+                        width: `${Math.min(targetPercent, 100)}%`,
+                        duration: segmentDuration,
+                        ease: "power1.inOut",
+                        onStart: () => {
+                            progressStatus.textContent = statuses[i];
+                        },
+                        onUpdate: () => {
+                            progressPercentage.textContent = `${Math.floor(parseFloat(progressBar.style.width))}%`;
+                        }
+                    });
+                }
+            }
+
+            // Library filters with animated transitions
+            const libraryFilters = document.querySelectorAll('.library-filter');
+            libraryFilters.forEach(filter => {
+                filter.addEventListener('click', function() {
+                    const parent = this.closest('.library-filters');
+                    
+                    // Animate selection change
+                    gsap.to(parent.querySelector('.library-filter.active'), {
+                        backgroundColor: 'transparent',
+                        color: 'var(--text-secondary)',
+                        duration: 0.3,
+                        ease: "power2.inOut"
+                    });
+                    
+                    parent.querySelectorAll('.library-filter').forEach(f => f.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    gsap.to(this, {
+                        backgroundColor: 'var(--gray-900)',
+                        color: 'white',
+                        duration: 0.3,
+                        ease: "power2.inOut"
+                    });
+                    
+                    // Filter animation would go here
+                    // For example, fade out non-matching items and fade in matching ones
+                });
+            });
+
+            // Helper Functions
+            function updateRecordingTime() {
+                recordingSeconds++;
+                const hours = Math.floor(recordingSeconds / 3600);
+                const minutes = Math.floor((recordingSeconds % 3600) / 60);
+                const seconds = recordingSeconds % 60;
+                
+                recordingTime.textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            function createVisualizer() {
+                // Clear existing bars
+                visualizerBars.innerHTML = '';
+                
+                // Create 100 bars with random heights
+                for (let i = 0; i < 100; i++) {
+                    const bar = document.createElement('div');
+                    bar.className = 'visualizer-bar';
+                    visualizerBars.appendChild(bar);
+                    updateVisualizerBar(bar);
+                }
+                
+                // Animate bars while recording
+                function animateVisualizer() {
+                    if (!isRecording) return;
+                    
+                    const bars = visualizerBars.querySelectorAll('.visualizer-bar');
+                    bars.forEach(bar => {
+                        updateVisualizerBar(bar);
+                    });
+                    
+                    requestAnimationFrame(animateVisualizer);
+                }
+                
+                animateVisualizer();
+            }
+            
+            function updateVisualizerBar(bar) {
+                // Animate with GSAP for smoother transition
+                gsap.to(bar, {
+                    height: `${Math.floor(Math.random() * 75) + 5}px`,
+                    duration: 0.2,
+                    ease: "power1.out"
+                });
+            }
+            
+            function simulateProcessing(progressBar, percentageElem, statusElem, callback) {
+                let progress = 0;
+                const statuses = [
+                    'Iniciando processamento...',
+                    'Analisando dados...',
+                    'Convertendo formato...',
+                    'Aplicando algoritmos...',
+                    'Finalizando...'
+                ];
+                
+                // Use GSAP timeline for smoother sequential progress animations
+                const tl = gsap.timeline({
+                    onComplete: () => {
+                        if (callback) setTimeout(callback, 500);
+                    }
+                });
+                
+                // Segment the timeline into phases
+                for (let i = 0; i < statuses.length; i++) {
+                    const segmentDuration = 0.8 + Math.random() * 1; // Varied duration
+                    const targetPercent = (i + 1) * 20;
+                    
+                    tl.to(progressBar, {
+                        width: `${Math.min(targetPercent, 100)}%`,
+                        duration: segmentDuration,
+                        ease: "power1.inOut",
+                        onStart: () => {
+                            statusElem.textContent = statuses[i];
+                        },
+                        onUpdate: () => {
+                            percentageElem.textContent = `${Math.floor(parseFloat(progressBar.style.width))}%`;
+                        }
+                    });
+                }
+            }
+            
+            function handleUploadFile(file) {
+                // Animate preview appearance
+                uploadPreview.classList.add('visible');
+                uploadFileName.textContent = file.name;
+                
+                // Format file size
+                let fileSize;
+                if (file.size < 1024) {
+                    fileSize = `${file.size} B`;
+                } else if (file.size < 1024 * 1024) {
+                    fileSize = `${(file.size / 1024).toFixed(1)} KB`;
+                } else {
+                    fileSize = `${(file.size / (1024 * 1024)).toFixed(1)} MB`;
+                }
+                
+                uploadFileMeta.textContent = fileSize;
+                
+                // Update icon based on file type
+                const fileIcon = uploadPreview.querySelector('.upload-preview-icon i');
+                if (file.type.startsWith('audio/')) {
+                    fileIcon.className = 'fas fa-file-audio';
+                    document.getElementById('uploadDiarizationCheckbox').parentElement.style.display = 'flex';
+                } else if (file.type.startsWith('text/')) {
+                    fileIcon.className = 'fas fa-file-alt';
+                    document.getElementById('uploadDiarizationCheckbox').parentElement.style.display = 'none';
+                } else if (file.type.includes('document')) {
+                    fileIcon.className = 'fas fa-file-word';
+                    document.getElementById('uploadDiarizationCheckbox').parentElement.style.display = 'none';
+                } else {
+                    fileIcon.className = 'fas fa-file';
+                    document.getElementById('uploadDiarizationCheckbox').parentElement.style.display = 'none';
+                }
+                
+                // Animate preview entrance
+                gsap.fromTo(uploadPreview, 
+                    {y: 20, opacity: 0},
+                    {y: 0, opacity: 1, duration: 0.5, ease: "power2.out"}
+                );
+            }
+            
+            // Enhanced toast notifications with GSAP animations
+            window.showToast = function(type, title, message, duration = 5000) {
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                
+                let iconClass;
+                switch (type) {
+                    case 'success':
+                        iconClass = 'fa-check-circle';
+                        break;
+                    case 'error':
+                        iconClass = 'fa-exclamation-circle';
+                        break;
+                    case 'warning':
+                        iconClass = 'fa-exclamation-triangle';
+                        break;
+                    default:
+                        iconClass = 'fa-info-circle';
+                }
+                
+                toast.innerHTML = `
+                    <div class="toast-icon ${type}">
+                        <i class="fas ${iconClass}"></i>
+                    </div>
+                    <div class="toast-content">
+                        <div class="toast-title">${title}</div>
+                        <div class="toast-message">${message}</div>
+                    </div>
+                    <button class="toast-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                const toastContainer = document.querySelector('.toast-container');
+                toastContainer.appendChild(toast);
+                
+                // Add event listener to close button
+                const closeBtn = toast.querySelector('.toast-close');
+                closeBtn.addEventListener('click', function() {
+                    removeToast(toast);
+                });
+                
+                // Animate toast entrance
+                gsap.fromTo(toast, 
+                    {opacity: 0, y: 20, scale: 0.8},
+                    {opacity: 1, y: 0, scale: 1, duration: 0.4, ease: "back.out(1.5)"}
+                );
+                
+                // Auto remove after duration
+                setTimeout(() => {
+                    removeToast(toast);
+                }, duration);
+            }
+            
+            function removeToast(toast) {
+                // Animate toast exit
+                gsap.to(toast, {
+                    opacity: 0,
+                    y: 20,
+                    scale: 0.8,
+                    duration: 0.3,
+                    ease: "power2.in",
+                    onComplete: () => toast.remove()
+                });
+            }
+            
+            // Enhanced modal with GSAP animations
+            function showModal(title, content, cancelText, confirmText, cancelCallback, confirmCallback) {
+                document.getElementById('modalTitle').textContent = title;
+                document.getElementById('modalBody').innerHTML = content;
+                
+                const modalFooter = document.getElementById('modalFooter');
+                const modalCancelBtn = document.getElementById('modalCancelBtn');
+                const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+                const modalContainer = document.querySelector('.modal-container');
+                
+                // Reset visibility
+                document.getElementById('modalClose').style.display = 'block';
+                modalFooter.style.display = 'flex';
+                
+                if (cancelText) {
+                    modalCancelBtn.textContent = cancelText;
+                    modalCancelBtn.style.display = 'block';
+                } else {
+                    modalCancelBtn.style.display = 'none';
+                }
+                
+                if (confirmText) {
+                    modalConfirmBtn.textContent = confirmText;
+                    modalConfirmBtn.style.display = 'block';
+                } else {
+                    modalConfirmBtn.style.display = 'none';
+                }
+                
+                // Show overlay with animation
+                modalOverlay.classList.add('show');
+                
+                // Additional entrance animation for modal container
+                gsap.fromTo(modalContainer, 
+                    {y: 40, opacity: 0.8, scale: 0.95},
+                    {y: 0, opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.2)"}
+                );
+                
+                // Setup event handlers
+                modalCancelBtn.onclick = function() {
+                    if (cancelCallback) cancelCallback();
+                };
+                
+                modalConfirmBtn.onclick = function() {
+                    if (confirmCallback) confirmCallback();
+                };
+            }
+            
+            function hideModal() {
+                // Animate modal exit
+                const modalContainer = document.querySelector('.modal-container');
+                gsap.to(modalContainer, {
+                    y: 40,
+                    opacity: 0,
+                    scale: 0.95,
+                    duration: 0.4,
+                    ease: "power2.in",
+                    onComplete: () => {
+                        modalOverlay.classList.remove('show');
+                    }
+                });
+            }
+            
+            // Close modal when clicking the X or outside the modal
+            modalClose.addEventListener('click', hideModal);
+            
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === modalOverlay) {
+                    hideModal();
+                }
+            });
+            
+            // Focus Mode Functionality with enhanced transitions
+            const focusModeToggle = document.getElementById('focusModeToggle');
+            if (focusModeToggle) {
+                focusModeToggle.addEventListener('click', function() {
+                    toggleFocusMode();
+                });
+                
+                // Add keyboard shortcut (F11) for Focus Mode
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'F11' || (e.ctrlKey && e.key === 'f')) {
+                        e.preventDefault(); // Prevent default browser behavior
+                        toggleFocusMode();
+                    }
+                });
+            }
+            
+            function toggleFocusMode() {
+                isFocusMode = !isFocusMode;
+                
+                if (isFocusMode) {
+                    // Enter focus mode with animations
+                    gsap.to(['.app-sidebar', '.document-library', '.app-header'], {
+                        opacity: 0,
+                        x: -20,
+                        duration: 0.6,
+                        ease: "power2.inOut",
+                        stagger: 0.1,
+                        onComplete: () => {
+                            document.body.classList.add('focus-mode');
+                        }
+                    });
+                    
+                    gsap.to('.document-workspace', {
+                        duration: 0.8,
+                        ease: "power2.inOut",
+                        onComplete: () => {
+                            // Animate document container growing
+                            gsap.to('.document-container', {
+                                maxWidth: '900px',
+                                boxShadow: 'var(--shadow-lg)',
+                                duration: 0.6,
+                                ease: "power2.out",
+                                delay: 0.2
+                            });
+                        }
+                    });
+                    
+                    // Update icon
+                    const icon = focusModeToggle.querySelector('i');
+                    icon.classList.remove('fa-expand-alt');
+                    icon.classList.add('fa-compress-alt');
+                    focusModeToggle.title = "Sair do Modo Foco";
+                    showToast('info', 'Modo Foco ativado', 'Pressione F11 ou clique no botão novamente para sair.');
+                } else {
+                    // Exit focus mode with animations
+                    document.body.classList.remove('focus-mode');
+                    
+                    gsap.to('.document-container', {
+                        maxWidth: '800px',
+                        boxShadow: 'var(--shadow-sm)',
+                        duration: 0.4,
+                        ease: "power2.inOut"
+                    });
+                    
+                    gsap.fromTo(['.app-sidebar', '.document-library', '.app-header'], 
+                        {opacity: 0, x: -20},
+                        {opacity: 1, x: 0, duration: 0.6, delay: 0.2, stagger: 0.1, ease: "power2.out"}
+                    );
+                    
+                    // Update icon
+                    const icon = focusModeToggle.querySelector('i');
+                    icon.classList.remove('fa-compress-alt');
+                    icon.classList.add('fa-expand-alt');
+                    focusModeToggle.title = "Entrar no Modo Foco";
+                }
+            }
+            
+            // Document Editing Functionality with fluid transitions
+            const editDocBtn = document.getElementById('editDocBtn');
+            if (editDocBtn) {
+                editDocBtn.addEventListener('click', function() {
+                    toggleEditMode();
+                });
+            }
+            
+            function toggleEditMode() {
+                isEditMode = !isEditMode;
+                const documentView = document.querySelector('.document-view');
+                
+                if (isEditMode) {
+                    // Switch to edit mode with animation
+                    const content = documentView.textContent;
+                    
+                    gsap.to(documentView, {
+                        opacity: 0,
+                        duration: 0.3,
+                        ease: "power2.inOut",
+                        onComplete: () => {
+                            documentView.style.display = 'none';
+                            
+                            // Create edit area
+                            const editArea = document.createElement('textarea');
+                            editArea.className = 'document-edit';
+                            editArea.value = content;
+                            editArea.id = 'documentEditor';
+                            
+                            documentView.parentNode.appendChild(editArea);
+                            
+                            // Animate edit area entrance
+                            gsap.fromTo(editArea, 
+                                {opacity: 0},
+                                {opacity: 1, duration: 0.4, ease: "power2.out"}
+                            );
+                            
+                            // Update button text with animation
+                            gsap.to(editDocBtn, {
+                                opacity: 0,
+                                scale: 0.9,
+                                duration: 0.2,
+                                ease: "power2.inOut",
+                                onComplete: () => {
+                                    editDocBtn.innerHTML = '<i class="fas fa-save"></i> Salvar';
+                                    gsap.to(editDocBtn, {
+                                        opacity: 1,
+                                        scale: 1,
+                                        duration: 0.2,
+                                        ease: "power2.out"
+                                    });
+                                }
+                            });
+                            
+                            // Set up auto-save
+                            setupAutoSave(editArea);
+                            
+                            // Focus on the textarea
+                            editArea.focus();
+                        }
+                    });
+                } else {
+                    // Switch back to view mode with animation
+                    const editArea = document.getElementById('documentEditor');
+                    
+                    if (editArea) {
+                        // Update content
+                        documentView.textContent = editArea.value;
+                        
+                        // Animate transition
+                        gsap.to(editArea, {
+                            opacity: 0,
+                            duration: 0.3,
+                            ease: "power2.inOut",
+                            onComplete: () => {
+                                editArea.remove();
+                                documentView.style.display = 'block';
+                                
+                                gsap.fromTo(documentView, 
+                                    {opacity: 0},
+                                    {opacity: 1, duration: 0.4, ease: "power2.out"}
+                                );
+                                
+                                // Update button text with animation
+                                gsap.to(editDocBtn, {
+                                    opacity: 0,
+                                    scale: 0.9,
+                                    duration: 0.2,
+                                    ease: "power2.inOut",
+                                    onComplete: () => {
+                                        editDocBtn.innerHTML = '<i class="fas fa-edit"></i> Editar';
+                                        gsap.to(editDocBtn, {
+                                            opacity: 1,
+                                            scale: 1,
+                                            duration: 0.2,
+                                            ease: "power2.out"
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    
+                    // Show save confirmation
+                    const documentStatus = document.querySelector('.document-status');
+                    if (documentStatus) {
+                        documentStatus.innerHTML = '<i class="fas fa-check-circle"></i> Todas as alterações salvas';
+                        documentStatus.className = 'document-status saved';
+                        
+                        // Animate status update
+                        gsap.fromTo(documentStatus, 
+                            {opacity: 0, y: -10},
+                            {opacity: 1, y: 0, duration: 0.4, ease: "power2.out"}
+                        );
+                    }
+                    
+                    showToast('success', 'Documento salvo', 'Todas as alterações foram salvas com sucesso.');
+                }
+            }
+            
+            function setupAutoSave(editArea) {
+                // Setup input handler for auto-save
+                editArea.addEventListener('input', function() {
+                    lastEditTime = Date.now();
+                    
+                    // Update status
+                    const documentStatus = document.querySelector('.document-status');
+                    if (documentStatus) {
+                        documentStatus.innerHTML = '<i class="fas fa-clock"></i> Editando...';
+                        documentStatus.className = 'document-status saving';
+                    }
+                });
+                
+                // Auto-save timer
+                const autoSaveInterval = setInterval(function() {
+                    if (isEditMode && Date.now() - lastEditTime > 3000) { // 3 seconds after last edit
+                        // Perform save operation
+                        const documentStatus = document.querySelector('.document-status');
+                        if (documentStatus) {
+                            const currentTime = new Date().toLocaleTimeString();
+                            documentStatus.innerHTML = '<i class="fas fa-check-circle"></i> Salvo automaticamente às ' + currentTime;
+                            documentStatus.className = 'document-status saved';
+                            
+                            // Animate status update
+                            gsap.fromTo(documentStatus, 
+                                {opacity: 0.5},
+                                {opacity: 1, duration: 0.3, ease: "power2.out"}
+                            );
+                        }
+                        
+                        // In a real app, we would send the content to the server here
+                        console.log('Auto-saved document at', new Date().toLocaleTimeString());
+                    }
+                }, 3000); // Check every 3 seconds
+                
+                // Clear interval when switching back to view mode
+                document.addEventListener('click', function(e) {
+                    if (!isEditMode && autoSaveInterval) {
+                        clearInterval(autoSaveInterval);
+                    }
+                }, { once: true });
+            }
+            
+            // Add water-like ripple effect
+            function addRippleEffect(elements) {
+                elements.forEach(element => {
+                    element.addEventListener('click', function(e) {
+                        // Create ripple element
+                        const ripple = document.createElement('span');
+                        ripple.className = 'ripple';
+                        this.appendChild(ripple);
+                        
+                        // Position the ripple
+                        const rect = this.getBoundingClientRect();
+                        const size = Math.max(rect.width, rect.height) * 2.5;
+                        const x = e.clientX - rect.left - size / 2;
+                        const y = e.clientY - rect.top - size / 2;
+                        
+                        ripple.style.width = ripple.style.height = `${size}px`;
+                        ripple.style.left = `${x}px`;
+                        ripple.style.top = `${y}px`;
+                        
+                        // Add animation class
+                        ripple.classList.add('ripple-animation');
+                        
+                        // Remove the ripple after animation completes
+                        setTimeout(() => {
+                            ripple.remove();
+                        }, 800);
+                    });
+                });
+            }
+            
+            // Initialize fluid animations and interactions
+            function initFluidAnimations() {
+                // Add ripple effect to buttons
+                addRippleEffect(document.querySelectorAll('.btn, .toolbar-btn, .library-btn, .document-format-option'));
+                
+                // Add floating animations to cards
+                gsap.utils.toArray('.stat-card').forEach((card, index) => {
+                    // Apply different animation parameters to each card for natural effect
+                    gsap.to(card, {
+                        y: -8,
+                        duration: 3 + Math.random() * 2,
+                        delay: index * 0.2,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "sine.inOut"
+                    });
+                });
+                
+                // Subtle floating for recent items
+                gsap.utils.toArray('.recent-item').forEach((item, index) => {
+                    gsap.to(item, {
+                        y: -5,
+                        duration: 4 + Math.random(),
+                        delay: 0.1 * index,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "sine.inOut"
+                    });
+                });
+                
+                // Add subtle hover animations to all elements with hover states
+                const hoverElements = document.querySelectorAll('.btn, .toolbar-btn, .library-btn, .document-item, .recent-item, .nav-item, .sidebar-link');
+                
+                hoverElements.forEach(element => {
+                    element.addEventListener('mouseenter', function() {
+                        // Scale up slightly
+                        gsap.to(this, {
+                            boxShadow: 'var(--shadow-md)',
+                            y: -2,
+                            duration: 0.3,
+                            ease: "back.out(1.5)"
+                        });
+                    });
+                    
+                    element.addEventListener('mouseleave', function() {
+                        // Return to original
+                        gsap.to(this, {
+                            boxShadow: '',
+                            y: 0,
+                            duration: 0.3,
+                            ease: "power2.out"
+                        });
+                    });
+                });
+                
+                // Create ambient subtle glow animation
+                const glowElements = document.querySelectorAll('.glow-effect');
+                glowElements.forEach(element => {
+                    // Random parameters for more organic feel
+                    const delay = Math.random() * 5;
+                    
+                    gsap.to(element, {
+                        boxShadow: "0 5px 15px rgba(120, 150, 255, 0.1)",
+                        duration: 3 + Math.random() * 2,
+                        delay: delay,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "sine.inOut"
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
